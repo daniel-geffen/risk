@@ -1,0 +1,20 @@
+#mapObject {
+    width: 75%;
+}
+
+#legend {
+    display: inline-block;
+    vertical-align: top;
+    margin: 50px;
+    font-size: 24px;
+}
+
+#legendList {
+    list-style-type: square;
+    margin: 0;
+    font-size: 24px;
+}
+
+li {
+    margin: 20px 0;
+}
