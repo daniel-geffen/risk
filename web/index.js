@@ -19,65 +19,49 @@ const serverResponse = {
 let svgDoc, json;
 $.getJSON('continents.json', obj => json = obj);
 
-
 initPlayerCountries = (playerData, playerName) => {
     $('#legendList').append($(`<li style="color:${playerData.color}" />`).text(playerName));
 
     _.forEach(playerData.countries, (numOfSoldiers, countryName) => {
-        const country = svgDoc.getElementById(countryName);
-        country.setAttribute('fill', playerData.color);
-        const boundingBox = country.getBBox();
-        const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        textElement.setAttribute('transform', 'translate(' + (boundingBox.x + boundingBox.width/2) + ' ' + (boundingBox.y + boundingBox.height/2) + ')');
-        textElement.setAttribute('class', 'countryText');
-        textElement.textContent = numOfSoldiers;
-        country.parentNode.insertBefore(textElement, country.nextSibling);
+        const country = $(`[id='${countryName}']`, svgDoc);
+        country.attr('fill', playerData.color);
+        const boundingBox = country[0].getBBox();
+        const textElement = $(document.createElementNS('http://www.w3.org/2000/svg', 'text')).attr({
+            transform: `translate(${boundingBox.x + boundingBox.width/2} ${boundingBox.y + boundingBox.height/2})`,
+            class: 'countryText'
+        }).text(numOfSoldiers);
+        country.parent().after(textElement);
     })
 };
 
-initCountry = country => {
-    country.addEventListener('mouseover', mouseoverCountry);
-};
-
-removeNeighbors = () => {
-    const map = svgDoc.getElementById('map');
-    while (map.getElementsByClassName('neighbor').length) {
-        map.removeChild(map.getElementsByClassName('neighbor')[0]);
-    }
-};
-
 mouseoverCountry = evt => {
-    const country = evt.target;
-    const outline = country.getAttribute('d');
+    const country = $(evt.target);
 
-    const countryHighlight = svgDoc.getElementById('Country Highlight');
-    const countryName = country.getAttribute('id');
+    $('#highlight', svgDoc).attr('d', country.attr('d'));
+    const countryName = country.attr('id');
     const continentName = _.findKey(json, countryObj => _.includes(_.keys(countryObj), countryName));
 
-    countryHighlight.setAttribute( 'd', outline);
     $('#countryName').text(countryName);
     $('#continentName').text(continentName);
-    removeNeighbors();
+    $('#map', svgDoc).children('.neighbor').remove();
 
     _.forEach(json[continentName][countryName]['neighbors'], neighborId => {
         const neighborName = _.findKey(_.merge(..._.values(json)), {id: neighborId});
-        const neighborOutline = svgDoc.getElementById(neighborName).getAttribute('d');
-        const neighborHighlight = countryHighlight.cloneNode(true);
-        neighborHighlight.setAttribute('d', neighborOutline);
-        neighborHighlight.setAttribute('id', neighborId);
-        neighborHighlight.setAttribute('class', 'neighbor');
-        neighborHighlight.setAttribute('opacity', '0.2');
-        neighborHighlight.style['pointer-events'] = 'none';
-        svgDoc.getElementById('map').appendChild(neighborHighlight);
+        const neighborOutline = $(`[id='${neighborName}']`, svgDoc).attr('d');
+        const neighborHighlight = $('#highlight', svgDoc).clone().attr({
+            d: neighborOutline,
+            id: neighborId,
+            class: 'neighbor'
+        });
+        $('#map', svgDoc).append(neighborHighlight);
     })
 };
 
 mouseoverSea = evt => {
-    const sea = evt.target;
-    $('#countryName').text(sea.getAttribute( 'id' ));
+    $('#countryName').text($(evt.target).attr( 'id' ));
     $('#continentName').text('');
-    svgDoc.getElementById('Country Highlight').setAttribute( 'd', 'm0 0' );
-    removeNeighbors();
+    $('#highlight', svgDoc).attr('d', 'm0 0');
+    $('#map', svgDoc).children('.neighbor').remove();
 };
 
 init = () => {
@@ -86,8 +70,8 @@ init = () => {
 
     _.forEach(serverResponse, initPlayerCountries);
 
-    _.forEach(svgDoc.getElementsByClassName('country'), initCountry);
-    _.forEach(svgDoc.getElementsByClassName('sea'), sea => sea.addEventListener('mouseover', mouseoverSea));
+    $('.country', svgDoc).mouseover(mouseoverCountry);
+    $('.sea', svgDoc).mouseover(mouseoverSea);
 };
 
 window.addEventListener('load', init);
