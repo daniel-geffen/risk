@@ -7,10 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="039532a3-873f-45b2-b40f-629efd7ea749" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/web/favicon.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/continents.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/Risk_board.svg" beforeDir="false" afterPath="$PROJECT_DIR$/web/Risk_board.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.js" afterDir="false" />
     </list>
@@ -26,41 +25,36 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
+            <state relative-caret-position="165">
+              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/index.css">
+        <entry file="file://$PROJECT_DIR$/web/continents.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="18" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
+            <state relative-caret-position="2715">
+              <caret line="181" column="1" lean-forward="true" selection-start-line="181" selection-start-column="1" selection-end-line="181" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/web/Risk_board.svg">
-          <provider selected="true" editor-type-id="images" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="22" column="68" selection-start-line="22" selection-start-column="68" selection-end-line="22" selection-end-column="68" />
+            <state relative-caret-position="603">
+              <caret line="87" column="4" selection-start-line="87" selection-start-column="4" selection-end-line="87" selection-end-column="4" />
               <folding>
-                <element signature="e#23#362#0" />
-                <element signature="e#41#180#0" />
-                <element signature="e#100#174#0" />
-                <element signature="e#198#360#0" />
-                <element signature="e#257#354#0" />
                 <element signature="n#style#0;n#li#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/Risk_board.svg">
+          <provider selected="true" editor-type-id="images" />
         </entry>
       </file>
     </leaf>
@@ -72,6 +66,8 @@
         <option value="JavaScript File" />
         <option value="CSS File" />
         <option value="Class" />
+        <option value="HTTP Request" />
+        <option value="JSON File" />
       </list>
     </option>
   </component>
@@ -84,11 +80,19 @@
       <find>hilite</find>
       <find>mouse</find>
       <find>[</find>
-      <find>&quot;</find>
       <find>legendsample</find>
+      <find>-</find>
+      <find>guniea</find>
+      <find>json</find>
+      <find>highlight</find>
+      <find>&quot;</find>
+      <find>neighbor hi</find>
+      <find>$(d</find>
+      <find>neighbor</find>
     </findStrings>
     <replaceStrings>
       <replace>highlight</replace>
+      <replace />
       <replace>'</replace>
     </replaceStrings>
   </component>
@@ -100,10 +104,13 @@
       <list>
         <option value="$PROJECT_DIR$/web/index.jsp" />
         <option value="$PROJECT_DIR$/src/fjhbsdf.java" />
-        <option value="$PROJECT_DIR$/web/index.html" />
-        <option value="$PROJECT_DIR$/web/index.js" />
         <option value="$PROJECT_DIR$/web/index.css" />
+        <option value="$PROJECT_DIR$/web/ngfc.http" />
+        <option value="$PROJECT_DIR$/web/index.html" />
+        <option value="$PROJECT_DIR$/web/neighbors.txt" />
+        <option value="$PROJECT_DIR$/web/continents.json" />
         <option value="$PROJECT_DIR$/web/Risk_board.svg" />
+        <option value="$PROJECT_DIR$/web/index.js" />
       </list>
     </option>
   </component>
@@ -114,8 +121,7 @@
     <option name="FILTER_DEBUG" value="true" />
     <option name="CUSTOM_FILTER" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
-    <option name="y" value="23" />
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
@@ -154,11 +160,12 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550137189673" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551783642020" />
+    <property name="js.last.introduce.type" value="CONST" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="fileTemplates" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -233,18 +240,21 @@
       <workItem from="1549962754176" duration="620000" />
       <workItem from="1549964180905" duration="4957000" />
       <workItem from="1550127480281" duration="8407000" />
-      <workItem from="1550237302564" duration="239000" />
+      <workItem from="1550237302564" duration="453000" />
+      <workItem from="1550733686251" duration="3058000" />
+      <workItem from="1550756717375" duration="17000" />
+      <workItem from="1551774769318" duration="6220000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19160000" />
+    <option name="totallyTimeSpent" value="28669000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14430244" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17739628" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -276,7 +286,7 @@
       <window_info anchor="right" id="Database" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Theme Preview" order="8" />
-      <window_info anchor="right" id="Version Control" order="9" weight="0.32832617" />
+      <window_info active="true" anchor="right" id="Version Control" order="9" visible="true" weight="0.32761088" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -305,37 +315,63 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/fjhbsdf.java" />
-    <entry file="file://$PROJECT_DIR$/web/index.css">
+    <entry file="file://$PROJECT_DIR$/web/ngfc.http" />
+    <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/extLibs/http_cdnjs.cloudflare.com_ajax_libs_lodash.js_4.17.11_lodash.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="18" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
+        <state relative-caret-position="15">
+          <caret line="12876" column="13" selection-start-line="12876" selection-start-column="13" selection-end-line="12876" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/index.js">
+    <entry file="file://$PROJECT_DIR$/web/index.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="22" column="68" selection-start-line="22" selection-start-column="68" selection-end-line="22" selection-end-column="68" />
-          <folding>
-            <element signature="e#23#362#0" />
-            <element signature="e#41#180#0" />
-            <element signature="e#100#174#0" />
-            <element signature="e#198#360#0" />
-            <element signature="e#257#354#0" />
-            <element signature="n#style#0;n#li#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="45">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/_flask_app.py _ _home_IntegralBBall_lineups_flask_app.py _ Editor _ IntegralBBall _ PythonAnywhere_files/spinner-small.gif">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/_flask_app.py _ _home_IntegralBBall_lineups_flask_app.py _ Editor _ IntegralBBall _ PythonAnywhere_files/analytics.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/_flask_app.py _ _home_IntegralBBall_lineups_flask_app.py _ Editor _ IntegralBBall _ PythonAnywhere_files/PA-logo-snake-only.svg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/neighbors.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5">
+          <caret line="113" column="8" selection-start-line="113" selection-start-column="8" selection-end-line="113" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
+        <state relative-caret-position="165">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/Risk_board.svg">
       <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/continents.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2715">
+          <caret line="181" column="1" lean-forward="true" selection-start-line="181" selection-start-column="1" selection-end-line="181" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="603">
+          <caret line="87" column="4" selection-start-line="87" selection-start-column="4" selection-end-line="87" selection-end-column="4" />
+          <folding>
+            <element signature="n#style#0;n#li#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
