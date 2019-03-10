@@ -1,13 +1,13 @@
 const serverResponse = {
     'Player 1': {
-        'color': 'rgb(198,138,49)',
+        'color': 'rgb(58,118,207)',
         'countries': {
             'North Africa': 2,
             'Western Europe': 6
         }
     },
     'Player 2': {
-        'color': 'rgb(156,195,90)',
+        'color': 'rgb(100,61,166)',
         'countries': {
             'Brazil': 3,
             'Central America': 7,
@@ -16,8 +16,11 @@ const serverResponse = {
     }
 };
 
-let svgDoc, json;
-$.getJSON('continents.json', obj => json = obj);
+let svgDoc, continentsJson, countriesJson;
+$.getJSON('continents.json', obj => {
+    continentsJson = obj;
+    countriesJson = _.assign({}, ..._.values(obj));
+});
 
 initPlayerCountries = (playerData, playerName) => {
     $('#legendList').append($(`<li style="color:${playerData.color}" />`).text(playerName));
@@ -39,14 +42,14 @@ mouseoverCountry = evt => {
 
     $('#highlight', svgDoc).attr('d', country.attr('d'));
     const countryName = country.attr('id');
-    const continentName = _.findKey(json, countryObj => _.includes(_.keys(countryObj), countryName));
+    const continentName = _.findKey(continentsJson, countryObj => _.includes(_.keys(countryObj), countryName));
 
     $('#countryName').text(countryName);
     $('#continentName').text(continentName);
     $('#map', svgDoc).children('.neighbor').remove();
 
-    _.forEach(json[continentName][countryName]['neighbors'], neighborId => {
-        const neighborName = _.findKey(_.merge(..._.values(json)), {id: neighborId});
+    _.forEach(continentsJson[continentName][countryName]['neighbors'], neighborId => {
+        const neighborName = _.findKey(countriesJson, {id: neighborId});
         const neighborOutline = $(`[id='${neighborName}']`, svgDoc).attr('d');
         const neighborHighlight = $('#highlight', svgDoc).clone().attr({
             d: neighborOutline,
