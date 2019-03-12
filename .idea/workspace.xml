@@ -7,8 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="039532a3-873f-45b2-b40f-629efd7ea749" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/web/countries.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/Risk_board.svg" beforeDir="false" afterPath="$PROJECT_DIR$/web/Risk_board.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -32,20 +32,39 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+            <state relative-caret-position="30">
+              <caret line="25" column="27" selection-start-line="25" selection-start-column="27" selection-end-line="25" selection-end-column="27" />
               <folding>
-                <element signature="n#style#0;n#li#0;n#!!top" expanded="true" />
+                <element signature="e#36#498#0" />
+                <element signature="e#46#181#0" />
+                <element signature="e#101#175#0" />
+                <element signature="e#196#354#0" />
+                <element signature="e#251#348#0" />
+                <element signature="e#369#496#0" />
+                <element signature="e#424#490#0" />
+                <element signature="e#500#1159#0" />
+                <element signature="e#664#1156#0" />
+                <element signature="e#1190#1354#0" />
+                <element signature="e#1188#1990#0" />
+                <element signature="e#1600#1987#0" />
+                <element signature="e#1825#1926#0" />
+                <element signature="e#2138#2146#0" />
+                <element signature="e#2225#2511#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/countries.json">
+        <entry file="file://$PROJECT_DIR$/web/Risk_board.svg">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/index.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2820">
-              <caret line="188" column="30" lean-forward="true" selection-start-line="188" selection-start-column="30" selection-end-line="188" selection-end-column="30" />
+            <state relative-caret-position="30">
+              <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -88,6 +107,7 @@
       <find>&quot;</find>
       <find>continents</find>
       <find>json</find>
+      <find>player 1</find>
     </findStrings>
     <replaceStrings>
       <replace>highlight</replace>
@@ -103,14 +123,14 @@
       <list>
         <option value="$PROJECT_DIR$/web/index.jsp" />
         <option value="$PROJECT_DIR$/src/fjhbsdf.java" />
-        <option value="$PROJECT_DIR$/web/index.css" />
         <option value="$PROJECT_DIR$/web/ngfc.http" />
         <option value="$PROJECT_DIR$/web/index.html" />
         <option value="$PROJECT_DIR$/web/neighbors.txt" />
         <option value="$PROJECT_DIR$/web/continents.json" />
-        <option value="$PROJECT_DIR$/web/Risk_board.svg" />
         <option value="$PROJECT_DIR$/web/fdhdgfjh" />
         <option value="$PROJECT_DIR$/web/countries.json" />
+        <option value="$PROJECT_DIR$/web/index.css" />
+        <option value="$PROJECT_DIR$/web/Risk_board.svg" />
         <option value="$PROJECT_DIR$/web/index.js" />
       </list>
     </option>
@@ -156,7 +176,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552407265632" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552411088581" />
     <property name="js.last.introduce.type" value="CONST" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -244,7 +264,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34233000" />
+    <option name="totallyTimeSpent" value="37667000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -319,13 +339,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/_flask_app.py _ _home_IntegralBBall_lineups_flask_app.py _ Editor _ IntegralBBall _ PythonAnywhere_files/spinner-small.gif" />
     <entry file="file://$PROJECT_DIR$/web/_flask_app.py _ _home_IntegralBBall_lineups_flask_app.py _ Editor _ IntegralBBall _ PythonAnywhere_files/analytics.js" />
     <entry file="file://$PROJECT_DIR$/web/_flask_app.py _ _home_IntegralBBall_lineups_flask_app.py _ Editor _ IntegralBBall _ PythonAnywhere_files/PA-logo-snake-only.svg" />
@@ -336,9 +349,6 @@
           <caret line="5922" column="4" selection-start-line="5922" selection-start-column="4" selection-end-line="5922" selection-end-column="4" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/Risk_board.svg">
-      <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/web/fdhdgfjh">
       <provider selected="true" editor-type-id="text-editor">
@@ -354,6 +364,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/countries.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="186" column="10" selection-start-line="186" selection-start-column="10" selection-end-line="186" selection-end-column="10" />
+          <folding>
+            <element signature="n#!!block;n#Alaska#0;n#!!top" />
+            <element signature="n#!!block;n#Northwest Territory#0;n#!!top" />
+            <element signature="n#!!block;n#Alberta#0;n#!!top" />
+            <element signature="n#!!block;n#Ontario#0;n#!!top" />
+            <element signature="n#!!block;n#Quebec#0;n#!!top" />
+            <element signature="n#!!block;n#Greenland#0;n#!!top" />
+            <element signature="n#!!block;n#Western United States#0;n#!!top" />
+            <element signature="n#!!block;n#Eastern United States#0;n#!!top" />
+            <element signature="n#!!block;n#Central America#0;n#!!top" />
+            <element signature="n#!!block;n#Venezuela#0;n#!!top" />
+            <element signature="n#!!block;n#Brazil#0;n#!!top" />
+            <element signature="n#!!block;n#Peru#0;n#!!top" />
+            <element signature="n#!!block;n#Argentina#0;n#!!top" />
+            <element signature="n#!!block;n#Iceland#0;n#!!top" />
+            <element signature="n#!!block;n#Great Britain#0;n#!!top" />
+            <element signature="n#!!block;n#Scandinavia#0;n#!!top" />
+            <element signature="n#!!block;n#Ukraine#0;n#!!top" />
+            <element signature="n#!!block;n#Northern Europe#0;n#!!top" />
+            <element signature="n#!!block;n#Southern Europe#0;n#!!top" />
+            <element signature="n#!!block;n#Western Europe#0;n#!!top" />
+            <element signature="n#!!block;n#North Africa#0;n#!!top" />
+            <element signature="n#!!block;n#Egypt#0;n#!!top" />
+            <element signature="n#!!block;n#East Africa#0;n#!!top" />
+            <element signature="n#!!block;n#Congo#0;n#!!top" />
+            <element signature="n#!!block;n#South Africa#0;n#!!top" />
+            <element signature="n#!!block;n#Madagascar#0;n#!!top" />
+            <element signature="n#!!block;n#Ural#0;n#!!top" />
+            <element signature="n#!!block;n#Siberia#0;n#!!top" />
+            <element signature="n#!!block;n#Yakutsk#0;n#!!top" />
+            <element signature="n#!!block;n#Kamchatka#0;n#!!top" />
+            <element signature="n#!!block;n#Irkutsk#0;n#!!top" />
+            <element signature="n#!!block;n#Mongolia#0;n#!!top" />
+            <element signature="n#!!block;n#Japan#0;n#!!top" />
+            <element signature="n#!!block;n#Afghanistan#0;n#!!top" />
+            <element signature="n#!!block;n#China#0;n#!!top" />
+            <element signature="n#!!block;n#Middle East#0;n#!!top" />
+            <element signature="n#!!block;n#India#0;n#!!top" />
+            <element signature="n#!!block;n#Siam#0;n#!!top" />
+            <element signature="n#!!block;n#Indonesia#0;n#!!top" />
+            <element signature="n#!!block;n#New Guinea#0;n#!!top" />
+            <element signature="n#!!block;n#Western Australia#0;n#!!top" />
+            <element signature="n#!!block;n#Eastern Australia#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/web/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -361,19 +422,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/countries.json">
+    <entry file="file://$PROJECT_DIR$/web/index.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2820">
-          <caret line="188" column="30" lean-forward="true" selection-start-line="188" selection-start-column="30" selection-end-line="188" selection-end-column="30" />
+        <state relative-caret-position="30">
+          <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/Risk_board.svg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/web/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
+        <state relative-caret-position="30">
+          <caret line="25" column="27" selection-start-line="25" selection-start-column="27" selection-end-line="25" selection-end-column="27" />
           <folding>
-            <element signature="n#style#0;n#li#0;n#!!top" expanded="true" />
+            <element signature="e#36#498#0" />
+            <element signature="e#46#181#0" />
+            <element signature="e#101#175#0" />
+            <element signature="e#196#354#0" />
+            <element signature="e#251#348#0" />
+            <element signature="e#369#496#0" />
+            <element signature="e#424#490#0" />
+            <element signature="e#500#1159#0" />
+            <element signature="e#664#1156#0" />
+            <element signature="e#1190#1354#0" />
+            <element signature="e#1188#1990#0" />
+            <element signature="e#1600#1987#0" />
+            <element signature="e#1825#1926#0" />
+            <element signature="e#2138#2146#0" />
+            <element signature="e#2225#2511#0" />
           </folding>
         </state>
       </provider>

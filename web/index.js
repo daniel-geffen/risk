@@ -1,19 +1,29 @@
 const serverResponse = {
-    'Player 1': {
-        'color': 'rgb(58,118,207)',
-        'countries': {
-            'North Africa': 2,
-            'Western Europe': 6
+    players: {
+        Player1: {
+            color: 'rgb(58,118,207)',
+            countries: {
+                'North Africa': 2,
+                'Western Europe': 6
+            }
+        },
+        Player2: {
+            color: 'rgb(108,126,83)',
+            countries: {
+                'Brazil': 3,
+                'Central America': 7,
+                'Venezuela': 5
+            }
+        },
+        Player3: {
+            color: 'rgb(42,175,157)',
+            countries: {
+                'Middle East': 4,
+                'Ukraine': 2
+            }
         }
     },
-    'Player 2': {
-        'color': 'rgb(100,61,166)',
-        'countries': {
-            'Brazil': 3,
-            'Central America': 7,
-            'Venezuela': 5
-        }
-    }
+    currentPlayer: 'Player1'
 };
 
 let svgDoc, countriesJson;
@@ -27,25 +37,30 @@ initPlayerCountries = (playerData, playerName) => {
         country.attr('fill', playerData.color);
         const boundingBox = country[0].getBBox();
         const textElement = $(document.createElementNS('http://www.w3.org/2000/svg', 'text')).attr({
-            transform: `translate(${boundingBox.x + boundingBox.width/2} ${boundingBox.y + boundingBox.height/2})`,
+            transform: `translate(${boundingBox.x + boundingBox.width / 2} ${boundingBox.y + boundingBox.height / 2})`,
             class: 'countryText'
         }).text(numOfSoldiers);
         country.parent().after(textElement);
     })
 };
 
-mouseoverCountry = evt => {
+mouseenterCountry = evt => {
     const country = $(evt.target);
-
-    $('#highlight', svgDoc).attr('d', country.attr('d'));
     const countryName = country.attr('id');
+
+    const currentPlayerCountries = serverResponse.players[serverResponse.currentPlayer].countries;
+    if (!_.has(currentPlayerCountries, countryName)) return;
+
+    country.css('cursor', 'pointer');
+    $('#highlight', svgDoc).attr('d', country.attr('d'));
     const continentName = countriesJson[countryName].continent;
 
     $('#countryName').text(countryName);
     $('#continentName').text(continentName);
     $('#map', svgDoc).children('.neighbor').remove();
 
-    _.forEach(countriesJson[countryName].neighbors, neighborId => {
+    const rivalNeighbors = _.difference(countriesJson[countryName].neighbors, _.map(_.pick(countriesJson, _.keys(currentPlayerCountries)), 'id'));
+    _.forEach(rivalNeighbors, neighborId => {
         const neighborName = _.findKey(countriesJson, {id: neighborId});
         const neighborOutline = $(`[id='${neighborName}']`, svgDoc).attr('d');
         const neighborHighlight = $('#highlight', svgDoc).clone().attr({
@@ -57,8 +72,8 @@ mouseoverCountry = evt => {
     })
 };
 
-mouseoverSea = evt => {
-    $('#countryName').text($(evt.target).attr( 'id' ));
+mouseLeaveCountry = () => {
+    $('#countryName').text("Choose a country");
     $('#continentName').text('');
     $('#highlight', svgDoc).attr('d', 'm0 0');
     $('#map', svgDoc).children('.neighbor').remove();
@@ -68,10 +83,10 @@ init = () => {
     const svg = document.getElementById('mapObject').contentDocument.getElementById('mapSvg');
     svgDoc = svg.ownerDocument;
 
-    _.forEach(serverResponse, initPlayerCountries);
+    _.forEach(serverResponse.players, initPlayerCountries);
 
-    $('.country', svgDoc).mouseover(mouseoverCountry);
-    $('.sea', svgDoc).mouseover(mouseoverSea);
+    $('.country', svgDoc).mouseenter(mouseenterCountry);
+    $('.country', svgDoc).mouseleave(mouseLeaveCountry);
 };
 
 window.addEventListener('load', init);
