@@ -1,0 +1,212 @@
+{
+  "Alaska": {
+    "id": 0,
+    "neighbors": [1, 2, 29],
+    "continent": "North America"
+  },
+  "Northwest Territory": {
+    "id": 1,
+    "neighbors": [0, 2, 3, 5],
+    "continent": "North America"
+  },
+  "Alberta": {
+    "id": 2,
+    "neighbors": [0, 1, 3, 6],
+    "continent": "North America"
+  },
+  "Ontario": {
+    "id": 3,
+    "neighbors": [1, 2, 6, 7, 4, 5],
+    "continent": "North America"
+  },
+  "Quebec": {
+    "id": 4,
+    "neighbors": [5, 3, 7],
+    "continent": "North America"
+  },
+  "Greenland": {
+    "id": 5,
+    "neighbors": [1, 3, 4, 13],
+    "continent": "North America"
+  },
+  "Western United States": {
+    "id": 6,
+    "neighbors": [2, 4, 7, 8],
+    "continent": "North America"
+  },
+  "Eastern United States": {
+    "id": 7,
+    "neighbors": [4, 3, 6, 8],
+    "continent": "North America"
+  },
+  "Central America": {
+    "id": 8,
+    "neighbors": [6, 7, 9],
+    "continent": "North America"
+  },
+  "Venezuela": {
+    "id": 9,
+    "neighbors": [8, 10, 11],
+    "continent": "South America"
+  },
+  "Brazil": {
+    "id": 10,
+    "neighbors": [9, 11, 12, 20],
+    "continent": "South America"
+  },
+  "Peru": {
+    "id": 11,
+    "neighbors": [9, 10, 12],
+    "continent": "South America"
+  },
+  "Argentina": {
+    "id": 12,
+    "neighbors": [11, 10],
+    "continent": "South America"
+  },
+  "Iceland": {
+    "id": 13,
+    "neighbors": [5, 14, 15],
+    "continent": "Europe"
+  },
+  "Great Britain": {
+    "id": 14,
+    "neighbors": [13, 15, 17, 19],
+    "continent": "Europe"
+  },
+  "Scandinavia": {
+    "id": 15,
+    "neighbors": [13, 14, 17, 16],
+    "continent": "Europe"
+  },
+  "Ukraine": {
+    "id": 16,
+    "neighbors": [15, 17, 18, 35, 33, 26],
+    "continent": "Europe"
+  },
+  "Northern Europe": {
+    "id": 17,
+    "neighbors": [15, 14, 19, 18, 16],
+    "continent": "Europe"
+  },
+  "Southern Europe": {
+    "id": 18,
+    "neighbors": [17, 19, 20, 21, 35, 16],
+    "continent": "Europe"
+  },
+  "Western Europe": {
+    "id": 19,
+    "neighbors": [18, 17, 14, 20],
+    "continent": "Europe"
+  },
+  "North Africa": {
+    "id": 20,
+    "neighbors": [18, 19, 10, 23, 22, 21],
+    "continent": "Africa"
+  },
+  "Egypt": {
+    "id": 21,
+    "neighbors": [18, 20, 22, 35],
+    "continent": "Africa"
+  },
+  "East Africa": {
+    "id": 22,
+    "neighbors": [21, 20, 23, 24, 25],
+    "continent": "Africa"
+  },
+  "Congo": {
+    "id": 23,
+    "neighbors": [22, 20, 24],
+    "continent": "Africa"
+  },
+  "South Africa": {
+    "id": 24,
+    "neighbors": [22, 23],
+    "continent": "Africa"
+  },
+  "Madagascar": {
+    "id": 25,
+    "neighbors": [22],
+    "continent": "Africa"
+  },
+  "Ural": {
+    "id": 26,
+    "neighbors": [27, 16, 33, 34],
+    "continent": "Asia"
+  },
+  "Siberia": {
+    "id": 27,
+    "neighbors": [26, 34, 31, 30, 28],
+    "continent": "Asia"
+  },
+  "Yakutsk": {
+    "id": 28,
+    "neighbors": [27, 30, 29],
+    "continent": "Asia"
+  },
+  "Kamchatka": {
+    "id": 29,
+    "neighbors": [0, 28, 30, 31, 32],
+    "continent": "Asia"
+  },
+  "Irkutsk": {
+    "id": 30,
+    "neighbors": [29, 28, 27, 31],
+    "continent": "Asia"
+  },
+  "Mongolia": {
+    "id": 31,
+    "neighbors": [32, 29, 30, 27, 34],
+    "continent": "Asia"
+  },
+  "Japan": {
+    "id": 32,
+    "neighbors": [29, 31],
+    "continent": "Asia"
+  },
+  "Afghanistan": {
+    "id": 33,
+    "neighbors": [34, 26, 16, 35, 36],
+    "continent": "Asia"
+  },
+  "China": {
+    "id": 34,
+    "neighbors": [31, 27, 26, 33, 36, 37],
+    "continent": "Asia"
+  },
+  "Middle East": {
+    "id": 35,
+    "neighbors": [36, 33, 16, 18, 21],
+    "continent": "Asia"
+  },
+  "India": {
+    "id": 36,
+    "neighbors": [34, 33, 37, 35],
+    "continent": "Asia"
+  },
+  "Siam": {
+    "id": 37,
+    "neighbors": [34, 36, 38],
+    "continent": "Asia"
+  },
+  "Indonesia": {
+    "id": 38,
+    "neighbors": [37, 39, 40],
+    "continent": "Oceania"
+  },
+  "New Guinea": {
+    "id": 39,
+    "neighbors": [38, 40, 41],
+    "continent": "Oceania"
+  },
+  "Western Australia": {
+    "id": 40,
+    "neighbors": [38, 39, 41],
+    "continent": "Oceania"
+  },
+  "Eastern Australia": {
+    "id": 41,
+    "neighbors": [39, 40],
+    "continent": "Oceania"
+  }
+}

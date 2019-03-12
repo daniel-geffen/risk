@@ -16,11 +16,8 @@ const serverResponse = {
     }
 };
 
-let svgDoc, continentsJson, countriesJson;
-$.getJSON('continents.json', obj => {
-    continentsJson = obj;
-    countriesJson = _.assign({}, ..._.values(obj));
-});
+let svgDoc, countriesJson;
+$.getJSON('countries.json', obj => countriesJson = obj);
 
 initPlayerCountries = (playerData, playerName) => {
     $('#legendList').append($(`<li style="color:${playerData.color}" />`).text(playerName));
@@ -42,13 +39,13 @@ mouseoverCountry = evt => {
 
     $('#highlight', svgDoc).attr('d', country.attr('d'));
     const countryName = country.attr('id');
-    const continentName = _.findKey(continentsJson, countryObj => _.includes(_.keys(countryObj), countryName));
+    const continentName = countriesJson[countryName].continent;
 
     $('#countryName').text(countryName);
     $('#continentName').text(continentName);
     $('#map', svgDoc).children('.neighbor').remove();
 
-    _.forEach(continentsJson[continentName][countryName]['neighbors'], neighborId => {
+    _.forEach(countriesJson[countryName].neighbors, neighborId => {
         const neighborName = _.findKey(countriesJson, {id: neighborId});
         const neighborOutline = $(`[id='${neighborName}']`, svgDoc).attr('d');
         const neighborHighlight = $('#highlight', svgDoc).clone().attr({
