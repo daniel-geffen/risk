@@ -13,7 +13,10 @@
 <body>
     <div>
         <div>
-            <h2 id="title"></h2>
+            <h2 id="title" hidden></h2>
+            <form id="usernameForm" action="javascript:handleUsername(usernameInput.value)">
+                <input id="usernameInput" placeholder="Enter your username..." >
+            </form>
 
             <object id="mapObject" data="Risk_board.svg" type="image/svg+xml">
                 Not Loaded

@@ -1,5 +1,18 @@
-let svgDoc, countriesJson, gameState;
+let webSocket, svgDoc, countriesJson, gameState, username;
 $.getJSON('countries.json', obj => countriesJson = obj);
+
+handleUsername = usernameInput => {
+    $('#usernameForm').hide();
+    $('#title').text("Waiting for more players...").show();
+
+    username = usernameInput;
+    const message = {
+        type: 0,
+        username
+    };
+
+    webSocket.send(JSON.stringify(message));
+};
 
 mouseenterCountry = evt => {
     const country = $(evt.target);
@@ -45,6 +58,8 @@ addPlayerListItem = (playerData, playerName, message) => {
     const listItem = $(`<li class="legendItem" />`).css('color', playerData.color).text(playerName);
     if (playerName === message.currentPlayer)
         listItem.addClass('selectedLegendItem');
+    if (playerName === username)
+        listItem.addClass('userLegendItem');
     $('#legendList').append(listItem);
 };
 
@@ -63,7 +78,8 @@ onServerMessage = evt => {
     gameState = JSON.parse(evt.data);
 
     $('#title').text(`${gameState.currentPlayer}'s turn`);
-    makeCurrentPlayerCountriesResponsive(_.keys(gameState.players[gameState.currentPlayer].countries));
+    if (gameState.currentPlayer === username)
+        makeCurrentPlayerCountriesResponsive(_.keys(gameState.players[gameState.currentPlayer].countries));
     _.forEach(gameState.players, (playerData, playerName) => {
         addPlayerListItem(playerData, playerName, gameState);
 
@@ -77,8 +93,8 @@ init = () => {
 
     svgDoc = svg.ownerDocument;
 
-    const ws = new WebSocket("ws://localhost:8080/Risk_war_exploded/ws");
-    ws.onmessage = onServerMessage;
+    webSocket = new WebSocket("ws://localhost:8080/Risk_war_exploded/ws");
+    webSocket.onmessage = onServerMessage;
 };
 
 window.addEventListener('load', init);

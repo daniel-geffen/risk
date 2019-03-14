@@ -7,6 +7,9 @@
         <element id="directory" name="classes">
           <element id="module-output" name="Risk" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="json-20180813" />
+        </element>
       </element>
     </root>
   </artifact>
