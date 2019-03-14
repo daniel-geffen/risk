@@ -8,6 +8,10 @@
 
   <defs>
     <style type="text/css"><![CDATA[
+      .country {
+          transition: fill 2s;
+      }
+
       .countryText {
           fill: DarkSlateGrey;
           stroke: DarkSlateGrey;

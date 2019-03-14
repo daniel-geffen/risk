@@ -1,55 +1,9 @@
-const serverResponse = {
-    players: {
-        Player1: {
-            color: 'rgb(58,118,207)',
-            countries: {
-                'North Africa': 2,
-                'Western Europe': 6
-            }
-        },
-        Player2: {
-            color: 'rgb(108,126,83)',
-            countries: {
-                'Brazil': 3,
-                'Central America': 7,
-                'Venezuela': 5
-            }
-        },
-        Player3: {
-            color: 'rgb(42,175,157)',
-            countries: {
-                'Middle East': 4,
-                'Ukraine': 2
-            }
-        }
-    },
-    currentPlayer: 'Player1'
-};
-
-let svgDoc, countriesJson;
+let svgDoc, countriesJson, gameState;
 $.getJSON('countries.json', obj => countriesJson = obj);
-
-initPlayerCountries = (playerData, playerName) => {
-    $('#legendList').append($(`<li style="color:${playerData.color}" />`).text(playerName));
-
-    _.forEach(playerData.countries, (numOfSoldiers, countryName) => {
-        const country = $(`[id='${countryName}']`, svgDoc);
-        country.attr('fill', playerData.color);
-        const boundingBox = country[0].getBBox();
-        const textElement = $(document.createElementNS('http://www.w3.org/2000/svg', 'text')).attr({
-            transform: `translate(${boundingBox.x + boundingBox.width / 2} ${boundingBox.y + boundingBox.height / 2})`,
-            class: 'countryText'
-        }).text(numOfSoldiers);
-        country.parent().after(textElement);
-    })
-};
 
 mouseenterCountry = evt => {
     const country = $(evt.target);
     const countryName = country.attr('id');
-
-    const currentPlayerCountries = serverResponse.players[serverResponse.currentPlayer].countries;
-    if (!_.has(currentPlayerCountries, countryName)) return;
 
     country.css('cursor', 'pointer');
     $('#highlight', svgDoc).attr('d', country.attr('d'));
@@ -59,7 +13,8 @@ mouseenterCountry = evt => {
     $('#continentName').text(continentName);
     $('#map', svgDoc).children('.neighbor').remove();
 
-    const rivalNeighbors = _.difference(countriesJson[countryName].neighbors, _.map(_.pick(countriesJson, _.keys(currentPlayerCountries)), 'id'));
+    const currentPlayerCountries = _.keys(gameState.players[gameState.currentPlayer].countries);
+    const rivalNeighbors = _.difference(countriesJson[countryName].neighbors, _.map(_.pick(countriesJson, currentPlayerCountries), 'id'));
     _.forEach(rivalNeighbors, neighborId => {
         const neighborName = _.findKey(countriesJson, {id: neighborId});
         const neighborOutline = $(`[id='${neighborName}']`, svgDoc).attr('d');
@@ -79,14 +34,51 @@ mouseLeaveCountry = () => {
     $('#map', svgDoc).children('.neighbor').remove();
 };
 
+makeCurrentPlayerCountriesResponsive = currentPlayerCountries => {
+    $('.country').unbind();
+    const responsiveCountries = $(_.join(_.map(currentPlayerCountries, c => `[id='${c}']`), ', '), svgDoc);
+    responsiveCountries.mouseenter(mouseenterCountry);
+    responsiveCountries.mouseleave(mouseLeaveCountry);
+};
+
+addPlayerListItem = (playerData, playerName, message) => {
+    const listItem = $(`<li class="legendItem" />`).css('color', playerData.color).text(playerName);
+    if (playerName === message.currentPlayer)
+        listItem.addClass('selectedLegendItem');
+    $('#legendList').append(listItem);
+};
+
+paintCountry = (color, numOfSoldiers, countryName) => {
+    const country = $(`[id='${countryName}']`, svgDoc);
+    country.attr('fill', color);
+    const boundingBox = country[0].getBBox();
+    const textElement = $(document.createElementNS('http://www.w3.org/2000/svg', 'text')).attr({
+        transform: `translate(${boundingBox.x + boundingBox.width / 2} ${boundingBox.y + boundingBox.height / 2})`,
+        class: 'countryText'
+    }).text(numOfSoldiers);
+    country.parent().after(textElement);
+};
+
+onServerMessage = evt => {
+    gameState = JSON.parse(evt.data);
+
+    $('#title').text(`${gameState.currentPlayer}'s turn`);
+    makeCurrentPlayerCountriesResponsive(_.keys(gameState.players[gameState.currentPlayer].countries));
+    _.forEach(gameState.players, (playerData, playerName) => {
+        addPlayerListItem(playerData, playerName, gameState);
+
+        _.forEach(playerData.countries, _.partial(paintCountry, playerData.color));
+    });
+
+};
+
 init = () => {
     const svg = document.getElementById('mapObject').contentDocument.getElementById('mapSvg');
+
     svgDoc = svg.ownerDocument;
 
-    _.forEach(serverResponse.players, initPlayerCountries);
-
-    $('.country', svgDoc).mouseenter(mouseenterCountry);
-    $('.country', svgDoc).mouseleave(mouseLeaveCountry);
+    const ws = new WebSocket("ws://localhost:8080/Risk_war_exploded/ws");
+    ws.onmessage = onServerMessage;
 };
 
 window.addEventListener('load', init);

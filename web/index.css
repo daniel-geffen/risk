@@ -1,5 +1,14 @@
+* {
+    font-family: sans-serif;
+}
+
+#title {
+    text-align: center;
+    font-size: 48px;
+}
+
 #mapObject {
-    width: 75%;
+    width: 65%;
 }
 
 #legend {
@@ -15,6 +24,12 @@
     font-size: 24px;
 }
 
-li {
+.legendItem {
     margin: 20px 0;
+    font-size: 20px;
+}
+
+.selectedLegendItem {
+    font-weight: bold;
+    font-size: 28px;
 }
