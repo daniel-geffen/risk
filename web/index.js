@@ -63,14 +63,14 @@ addPlayerListItem = (playerData, playerName, message) => {
     $('#legendList').append(listItem);
 };
 
-paintCountry = (color, numOfSoldiers, countryName) => {
+paintCountry = (color, numOfTroops, countryName) => {
     const country = $(`[id='${countryName}']`, svgDoc);
     country.attr('fill', color);
     const boundingBox = country[0].getBBox();
     const textElement = $(document.createElementNS('http://www.w3.org/2000/svg', 'text')).attr({
         transform: `translate(${boundingBox.x + boundingBox.width / 2} ${boundingBox.y + boundingBox.height / 2})`,
         class: 'countryText'
-    }).text(numOfSoldiers);
+    }).text(numOfTroops);
     country.parent().after(textElement);
 };
 
