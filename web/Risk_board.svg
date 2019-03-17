@@ -10,18 +10,23 @@
     <style type="text/css"><![CDATA[
       .country {
           transition: fill 2s;
+          cursor: pointer;
       }
 
       .countryText {
           fill: DarkSlateGrey;
           stroke: DarkSlateGrey;
-          font-size: 18px;
+          font-size: 22px;
           pointer-events: none;
       }
 
       .neighbor {
           opacity: 0.2;
           pointer-events: none;
+      }
+
+      .selectedNeighbor {
+          opacity: 0.5;
       }
     ]]></style>
   </defs>
