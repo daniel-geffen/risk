@@ -11,10 +11,11 @@ import java.util.List;
 
 public class GameManager {
     private static final String mapFilename = "/Users/tuvia/IdeaProjects/Risk/src/countries.json";
-    private static final String[] playerColors = {"rgb(58,118,207)", "rgb(108,126,83)", "rgb(42,175,157)"};
     private static final int initialTroops = 35;
+    private static final int numOfPlayers = 3;
 
     private List<Player> players;
+    private List<String> playerColors = Arrays.asList("rgb(58,118,207)", "rgb(100,61,166)", "rgb(42,175,157)", "rgb(108,126,83)", "rgb(55,101,206)", "rgb(34,135,174)");
     private Country[] countries;
 
     private JSONArray readMap() {
@@ -40,13 +41,14 @@ public class GameManager {
 
     public GameManager() {
         this.players = new ArrayList<>();
+        Collections.shuffle(this.playerColors);
         JSONArray map = this.readMap();
         this.countries = new Country[map.length()];
         populateCountryArray(map);
     }
 
     public void addPlayer(String name, Session socket) {
-        this.players.add(new Player(name, socket, playerColors[this.players.size()]));
+        this.players.add(new Player(name, socket, this.playerColors.get(this.players.size())));
     }
 
     public void removePlayer(Session session) {
@@ -61,7 +63,7 @@ public class GameManager {
     }
 
     public boolean readyToStart() {
-        return this.players.size() == 3;
+        return this.players.size() == numOfPlayers;
     }
 
     public void dealCountries() {

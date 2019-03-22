@@ -16,7 +16,7 @@
       .countryText {
           fill: DarkSlateGrey;
           stroke: DarkSlateGrey;
-          font-size: 22px;
+          font-size: 20px;
           pointer-events: none;
       }
 
