@@ -1,5 +1,15 @@
 * {
-    font-family: sans-serif;
+    font-family: fantasy;
+}
+
+body {
+    background-image: url("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/items/340220/01bf587da00fc14ea18ac97975cdb139dfad13a3.jpg");
+    background-size: cover;
+    height: 100vh;
+}
+
+input {
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 #title {
@@ -14,6 +24,14 @@
 
 #mapObject {
     width: 65%;
+    height: 75vh;
+}
+
+#gameInfo {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #legend {
@@ -41,4 +59,9 @@
 
 .userLegendItem {
     font-style: italic;
+}
+
+#countryInfo {
+    text-align: center;
+    display: flex;
 }

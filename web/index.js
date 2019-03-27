@@ -26,8 +26,7 @@ mouseEnterCountry = evt => {
     $('#highlight', svgDoc).attr('d', country.attr('d'));
     const continentName = countriesJson[countryName].continent;
 
-    $('#countryName').text(countryName);
-    $('#continentName').text(continentName);
+    $('#countryName').text(`${countryName}, ${continentName}`);
     $('#map', svgDoc).children('.neighbor').remove();
 
     const rivalNeighbors = getRivalNeighbors(countryName);
@@ -45,7 +44,6 @@ mouseEnterCountry = evt => {
 
 mouseLeaveCountry = () => {
     $('#countryName').text("Choose a country");
-    $('#continentName').text('');
     $('#highlight', svgDoc).attr('d', 'm0 0');
     $('#map', svgDoc).children('.neighbor').remove();
 };

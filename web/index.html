@@ -13,24 +13,31 @@
 <body>
     <div>
         <div>
-            <h2 id="title" hidden></h2>
+            <div id="title" hidden></div>
             <form id="usernameForm" action="javascript:handleUsername(usernameInput.value)">
                 <input id="usernameInput" placeholder="Enter your username..." >
             </form>
 
-            <object id="mapObject" data="Risk_board.svg" type="image/svg+xml">
-                Not Loaded
-            </object>
+            <div style="display: flex">
+                <object id="mapObject" data="Risk_board.svg" type="image/svg+xml">
+                    Not Loaded
+                </object>
 
-            <fieldset id="legend">
-                <legend>Players:</legend>
-                <ul id="legendList">
+                <div id="gameInfo">
+                    <fieldset id="legend">
+                        <legend>Players:</legend>
+                        <ul id="legendList">
+                        </ul>
+                    </fieldset>
 
-                </ul>
-            </fieldset>
+                    <form id="numberInputForm" hidden>
+                        <input type="number">
+                    </form>
+                </div>
+            </div>
         </div>
-        <h3 id="countryName">Move mouse over a country</h3>
-        <h4 id="continentName"></h4>
+
+        <h2 id="countryName" style="text-align: center">Move mouse over a country</h2>
     </div>
 </body>
 </html>
