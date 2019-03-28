@@ -4,21 +4,30 @@ import org.json.JSONTokener;
 
 import javax.websocket.Session;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class GameManager {
     private static final String mapFilename = "/Users/tuvia/IdeaProjects/Risk/src/countries.json";
     private static final int initialTroops = 35;
     private static final int numOfPlayers = 3;
+    private static int gameIdCounter = 1;
+    private static final Map<String, Integer> continentBonuses = new HashMap<String, Integer>() {{
+        put("Africa", 3);
+        put("Asia", 7);
+        put("Europe", 5);
+        put("North America", 5);
+        put("Oceania", 2);
+        put("South America", 2);
+    }};
+    private static Country[] countries = getCountryArray();
+    private static Map<String, Continent> continents = getContinents();
 
+    private int gameId;
+    private int turnNumber;
     private List<Player> players;
     private List<String> playerColors = Arrays.asList("rgb(58,118,207)", "rgb(100,61,166)", "rgb(42,175,157)", "rgb(108,126,83)", "rgb(55,101,206)", "rgb(34,135,174)");
-    private Country[] countries;
 
-    private JSONArray readMap() {
+    private static JSONArray readMapFile() {
         try {
             InputStream inputStream = new FileInputStream(new File(mapFilename));
             return new JSONArray(new JSONTokener(inputStream));
@@ -28,39 +37,53 @@ public class GameManager {
         }
     }
 
-    private void populateCountryArray(JSONArray map) {
-        for (int i = 0; i < this.countries.length; i++) {
+    private static Country[] getCountryArray() {
+        JSONArray map = readMapFile();
+        Country[] countries = new Country[map.length()];
+        for (int i = 0; i < countries.length; i++) {
             JSONObject obj = map.getJSONObject(i);
             List<Integer> neighbors = new ArrayList<>();
             for (Object n: obj.getJSONArray("neighbors"))
                 neighbors.add((Integer) n);
 
-            this.countries[i] = new Country(obj.getString("name"), obj.getString("continent"), neighbors);
+            countries[i] = new Country(obj.getString("name"), obj.getString("continent"), neighbors);
         }
+
+        return countries;
+    }
+
+    private static Map<String, Continent> getContinents() {
+        Map<String, Continent> continents = new HashMap<>();
+        for (String continentName : continentBonuses.keySet())
+            continents.put(continentName, new Continent(continentName, continentBonuses.get(continentName)));
+
+        for (Country country : countries)
+            continents.get(country.getContinent()).addCountry(country);
+
+        return continents;
     }
 
     public GameManager() {
+        this.gameId = gameIdCounter++;
+        this.turnNumber = 1;
         this.players = new ArrayList<>();
         Collections.shuffle(this.playerColors);
-        JSONArray map = this.readMap();
-        this.countries = new Country[map.length()];
-        populateCountryArray(map);
     }
 
     public void addPlayer(String name, Session socket) {
         this.players.add(new Player(name, socket, this.playerColors.get(this.players.size())));
     }
 
-    public void removePlayer(Session session) {
-        Player playerToRemove = null;
-        for (Player player : this.players) {
-            if (player.isSocket(session))
-                playerToRemove = player;
-        }
-
-        if (playerToRemove != null)
-            this.players.remove(playerToRemove);
-    }
+//    public void removePlayer(Session session) {
+//        Player playerToRemove = null;
+//        for (Player player : this.players) {
+//            if (player.isSocket(session))
+//                playerToRemove = player;
+//        }
+//
+//        if (playerToRemove != null)
+//            this.players.remove(playerToRemove);
+//    }
 
     public boolean readyToStart() {
         return this.players.size() == numOfPlayers;
@@ -76,13 +99,17 @@ public class GameManager {
 
     public String createTurnJSON() {
         JSONObject turnObj = new JSONObject();
+        turnObj.put("gameId", this.gameId);
+
         JSONObject playersObj = new JSONObject();
         for (Player player : this.players) {
             playersObj.put(player.getName(), player.getJSONObject());
         }
 
         turnObj.put("players", playersObj);
-        turnObj.put("currentPlayer", this.players.get(0).getName());
+        Player currentPlayer = this.players.get(this.turnNumber++ / numOfPlayers);
+        turnObj.put("currentPlayer", currentPlayer.getName());
+        turnObj.put("newTroops", currentPlayer.getNumberOfNewTroops(continents.values()));
 
         return turnObj.toString();
     }

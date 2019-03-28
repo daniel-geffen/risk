@@ -3,11 +3,10 @@ $.getJSON('countries.json', obj => countriesJson = obj);
 
 handleUsername = usernameInput => {
     $('#usernameForm').hide();
-    $('#title').text("Waiting for more players...").show();
+    $('#title').text('Waiting for more players...').show();
 
     username = usernameInput;
     const message = {
-        type: 0,
         username
     };
 
@@ -43,7 +42,7 @@ mouseEnterCountry = evt => {
 };
 
 mouseLeaveCountry = () => {
-    $('#countryName').text("Choose a country");
+    $('#countryName').text('Choose a country');
     $('#highlight', svgDoc).attr('d', 'm0 0');
     $('#map', svgDoc).children('.neighbor').remove();
 };
@@ -54,10 +53,14 @@ mouseEnterLeaveNeighbor = evt => {
 };
 
 conquerCountry = (defendingCountry, troopsMoved) => {
+    _.map(gameState.players, v => v.countries = _.omit(v.countries, defendingCountry.attr('id')));
+    gameState.players[gameState.currentPlayer].countries[defendingCountry.attr('id')] = troopsMoved;
+
     const defendingCountryId = countriesJson[defendingCountry.attr('id')].id;
     $(`#${defendingCountryId}`, svgDoc).remove();
     $(`#${defendingCountryId}Text`, svgDoc).text(troopsMoved);
     defendingCountry.attr('fill', gameState.players[gameState.currentPlayer].color);
+    makeCurrentPlayerCountriesResponsive();
 };
 
 mouseClickNeighbor = (attackingCountry, evt) => {
@@ -65,7 +68,12 @@ mouseClickNeighbor = (attackingCountry, evt) => {
     const attackingCountryId = countriesJson[attackingCountry].id;
     const defendingCountryId = countriesJson[defendingCountry.attr('id')].id;
 
-    const troopsToMove = prompt("Enter number of troops to move to conquered country");
+    // $('#numberInput').attr({
+    //     'min': 1,
+    //     'max': 0
+    // });
+    // $('#numberInputForm').prepend('Enter number of troops to move to the conquered country').show();
+    const troopsToMove = prompt('Enter number of troops to move to conquered country');
     const attackingText = $(`#${attackingCountryId}Text`, svgDoc);
     attackingText.text(attackingText.text() - troopsToMove);
     conquerCountry(defendingCountry, troopsToMove);
@@ -75,22 +83,32 @@ makeCurrentPlayerCountriesResponsive = () => {
     $('.country', svgDoc).unbind();
 
     const currentPlayerCountries = _.keys(gameState.players[gameState.currentPlayer].countries);
-    const responsiveCountries = $(_.join(_.map(currentPlayerCountries, c => `[id='${c}']`), ', '), svgDoc);
-    responsiveCountries.mouseenter(mouseEnterCountry);
-    responsiveCountries.click(mouseClickCountry);
-    responsiveCountries.mouseleave(mouseLeaveCountry);
+    $(_.join(_.map(currentPlayerCountries, c => `[id='${c}']`), ', '), svgDoc).on({
+        mouseenter: mouseEnterCountry,
+        click: mouseClickCountry,
+        mouseleave: mouseLeaveCountry
+    });
 };
 
 mouseClickCountry = evt => {
-    $('.country', svgDoc).unbind();
-
     const selectedCountry = $(evt.target);
-    selectedCountry.click(makeCurrentPlayerCountriesResponsive);
-    const attackingTargets = _.map(getRivalNeighbors(selectedCountry.attr('id')), id => _.findKey(countriesJson, {id}));
-    const attackingTargetsSelector = _.join(_.map(attackingTargets, c => `[id='${c}']`), ', ');
-    $(attackingTargetsSelector, svgDoc).mouseenter(mouseEnterLeaveNeighbor);
-    $(attackingTargetsSelector, svgDoc).mouseleave(mouseEnterLeaveNeighbor);
-    $(attackingTargetsSelector, svgDoc).click(_.partial(mouseClickNeighbor, selectedCountry.attr('id')));
+
+    if (gameState.newTroops) {
+        gameState.players[gameState.currentPlayer].countries[selectedCountry.attr('id')]++;
+        const selectedCountryText = $(`#${countriesJson[selectedCountry.attr('id')].id}Text`, svgDoc);
+        selectedCountryText.text(Number(selectedCountryText.text()) + 1);
+        $('#troopsToDistribute').text(--gameState.newTroops);
+    } else {
+        $('.country', svgDoc).unbind();
+        selectedCountry.click(makeCurrentPlayerCountriesResponsive);
+        const attackingTargets = _.map(getRivalNeighbors(selectedCountry.attr('id')), id => _.findKey(countriesJson, {id}));
+        const attackingTargetsSelector = _.join(_.map(attackingTargets, c => `[id='${c}']`), ', ');
+        $(attackingTargetsSelector, svgDoc).on({
+            mouseenter: mouseEnterLeaveNeighbor,
+            click: _.partial(mouseClickNeighbor, selectedCountry.attr('id')),
+            mouseleave: mouseEnterLeaveNeighbor
+        });
+    }
 };
 
 addPlayerListItem = (playerData, playerName, message) => {
@@ -118,8 +136,11 @@ onServerMessage = evt => {
     gameState = JSON.parse(evt.data);
 
     $('#title').text(`${gameState.currentPlayer}'s turn`);
-    if (gameState.currentPlayer === username)
+    if (gameState.currentPlayer === username) {
+        $('#countryName').show();
+        $('#troopsToDistribute').text(gameState.newTroops).parent().show();
         makeCurrentPlayerCountriesResponsive();
+    }
     _.forEach(gameState.players, (playerData, playerName) => {
         addPlayerListItem(playerData, playerName, gameState);
 
@@ -133,7 +154,7 @@ init = () => {
 
     svgDoc = svg.ownerDocument;
 
-    webSocket = new WebSocket("ws://localhost:8080/Risk_war_exploded/ws");
+    webSocket = new WebSocket('ws://localhost:8080/Risk_war_exploded/ws');
     webSocket.onmessage = onServerMessage;
 };
 

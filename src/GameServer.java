@@ -23,11 +23,9 @@ public class GameServer {
 
     }
 
-    @OnMessage
-    public void onMessage(String message, Session session) throws IOException {
-        JSONObject messageObj = new JSONObject(message);
+    private void addNewPlayer(Session session, String username) throws IOException {
         GameManager gameManager = games.get(0);
-        gameManager.addPlayer(messageObj.getString("username"), session);
+        gameManager.addPlayer(username, session);
 
         if (gameManager.readyToStart()) {
             gameManager.dealCountries();
@@ -35,6 +33,13 @@ public class GameServer {
 
             games.add(0, new GameManager());
         }
+    }
+
+    @OnMessage
+    public void onMessage(String message, Session session) throws IOException {
+        JSONObject messageObj = new JSONObject(message);
+        if (!messageObj.keySet().contains("gameId"))
+            addNewPlayer(session, messageObj.getString("username"));
 
     }
 

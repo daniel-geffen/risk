@@ -14,4 +14,8 @@ public class Country {
     public String getName() {
         return name;
     }
+
+    public String getContinent() {
+        return continent;
+    }
 }
