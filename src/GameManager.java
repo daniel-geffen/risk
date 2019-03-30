@@ -73,18 +73,7 @@ public class GameManager {
     public void addPlayer(String name, Session socket) {
         this.players.add(new Player(name, socket, this.playerColors.get(this.players.size())));
     }
-
-//    public void removePlayer(Session session) {
-//        Player playerToRemove = null;
-//        for (Player player : this.players) {
-//            if (player.isSocket(session))
-//                playerToRemove = player;
-//        }
-//
-//        if (playerToRemove != null)
-//            this.players.remove(playerToRemove);
-//    }
-
+    
     public boolean readyToStart() {
         return this.players.size() == numOfPlayers;
     }

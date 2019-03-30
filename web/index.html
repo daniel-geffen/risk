@@ -6,6 +6,8 @@
     <link rel="shortcut icon" type="image/png" href="favicon.jpeg"/>
     <link rel="stylesheet" type="text/css" href="index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/ui-darkness/jquery-ui.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
     <script src="index.js" type="text/javascript"></script>
 </head>
@@ -34,9 +36,12 @@
 
                     <h2 hidden>You have <b id="troopsToDistribute"></b> troops left to distribute</h2>
 
-                    <form id="numberInputForm" hidden>
-                        <input id="numberInput" type="number">
-                    </form>
+                    <div id="numberInputDialog" hidden>
+                        <span id="dialogText"></span>
+                        <div id="numberSlider">
+                            <div id="sliderHandle" class="ui-slider-handle"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -24,10 +24,6 @@ public class Player {
         return this.name;
     }
 
-    public boolean isSocket(Session session) {
-        return this.socket.getId().equals(session.getId());
-    }
-
     public void setCountries(List<Country> initialCountries, int initialTroops) {
         this.countries = new HashMap<>();
         Collections.shuffle(initialCountries);
