@@ -21,38 +21,35 @@ function addTroopsToCurrentPlayerCountry(countryName, troopsToAdd) {
 const stages = [
     {
         name: 'Draft',
-        mouseListeners: {
-            click: evt => {
-                if (gameState.newTroops > 0) {
-                    addTroopsToCurrentPlayerCountry($(evt.target).attr('id'), 1);
-                    $('#troopsToDistribute').text(--gameState.newTroops);
-                }
+        click: evt => {
+            if (gameState.newTroops > 0) {
+                addTroopsToCurrentPlayerCountry($(evt.target).attr('id'), 1);
+                $('#troopsToDistribute').text(--gameState.newTroops);
             }
-
         }
     },
     {
         name: 'Attack',
-        mouseListeners: {
-            click: evt => {
-                const selectedCountry = $(evt.target);
-                $('.country', svgDoc).unbind();
-                selectedCountry.click(makeCurrentPlayerCountriesResponsive);
-                const attackingTargets = _.map(getRivalNeighbors(selectedCountry.attr('id')), id => _.findKey(countriesJson, {id}));
-                const attackingTargetsSelector = _.join(_.map(attackingTargets, c => `[id='${c}']`), ', ');
+        click: evt => {
+            const selectedCountry = $(evt.target);
+            $('.country', svgDoc).unbind();
+            selectedCountry.click(makeCurrentPlayerCountriesResponsive);
+            const attackingTargets = _.map(getRivalNeighbors(selectedCountry.attr('id')), id => _.findKey(countriesJson, {id}));
+            const attackingTargetsSelector = _.join(_.map(attackingTargets, c => `[id='${c}']`), ', ');
 
-                const mouseEnterLeaveNeighbor = evt => $(`#${countriesJson[$(evt.target).attr('id')].id}`, svgDoc).toggleClass('selectedNeighbor');
-                $(attackingTargetsSelector, svgDoc).on({
-                    mouseenter: mouseEnterLeaveNeighbor,
-                    click: _.partial(mouseClickNeighbor, selectedCountry.attr('id')),
-                    mouseleave: mouseEnterLeaveNeighbor
-                });
-            }
+            const mouseEnterLeaveNeighbor = evt => $(`#${countriesJson[$(evt.target).attr('id')].id}`, svgDoc).toggleClass('selectedNeighbor');
+            $(attackingTargetsSelector, svgDoc).on({
+                mouseenter: mouseEnterLeaveNeighbor,
+                click: _.partial(mouseClickNeighbor, selectedCountry.attr('id')),
+                mouseleave: mouseEnterLeaveNeighbor
+            });
         }
     },
     {
         name: 'Fortify',
-        mouseListeners: {}
+        click: evt => {
+            const selectedCountry = $(evt.target);
+        }
     }
 ];
 
@@ -103,7 +100,7 @@ function mouseLeaveCountry() {
 }
 
 function conquerCountry(attackingCountryName, defendingCountryName, troopsToMove) {
-    _.map(gameState.players, v => v.countries = _.omit(v.countries, defendingCountryName));
+    _.forEach(gameState.players, v => v.countries = _.omit(v.countries, defendingCountryName));
 
     addTroopsToCurrentPlayerCountry(attackingCountryName, -troopsToMove);
     addTroopsToCurrentPlayerCountry(defendingCountryName, troopsToMove);
@@ -113,10 +110,24 @@ function conquerCountry(attackingCountryName, defendingCountryName, troopsToMove
     makeCurrentPlayerCountriesResponsive();
 }
 
-function mouseClickNeighbor(attackingCountryName, evt) {
+function checkWinning(attackingTroopsNum, defendingTroopsNum) {
+    while (attackingTroopsNum > 1 && defendingTroopsNum) {
+        const attackingDice = _.times(Math.min(3, attackingTroopsNum - 1), () => _.random(1, 6)).sort().reverse();
+        const defendingDice = _.times(Math.min(2, defendingTroopsNum), () => _.random(1, 6)).sort().reverse();
+
+        _.times(Math.min(attackingDice.length, defendingDice.length), i => {
+            if (attackingDice[i] > defendingDice[i]) defendingTroopsNum--;
+            else attackingTroopsNum--;
+        });
+    }
+
+    return {attackingTroopsNum, defendingTroopsNum}
+}
+
+function displayWinningDialog(attackingCountryName, defendingCountryName) {
     $('#numberSlider').slider(_.defaults({
         min: 1,
-        max: parseInt($(`#${countriesJson[attackingCountryName].id}Text`, svgDoc).text()) - 1,
+        max: gameState.players[gameState.currentPlayer].countries[attackingCountryName] - 1,
         value: 1
     }, sliderDefaultOptions));
 
@@ -126,7 +137,7 @@ function mouseClickNeighbor(attackingCountryName, evt) {
         buttons: {
             'Done': () => {
                 $('#numberInputDialog').dialog('close');
-                conquerCountry(attackingCountryName, $(evt.target).attr('id'), $('#numberSlider').slider('value'));
+                conquerCountry(attackingCountryName, defendingCountryName, $('#numberSlider').slider('value'));
             }
         },
         dialogClass: 'remove-close',
@@ -134,14 +145,34 @@ function mouseClickNeighbor(attackingCountryName, evt) {
     }, dialogDefaultOptions));
 }
 
+function mouseClickNeighbor(attackingCountryName, evt) {
+    const countryTroopNums = _.assign({}, ..._.map(gameState.players, v => v.countries));
+    const defendingCountryName = $(evt.target).attr('id');
+    const {attackingTroopsNum, defendingTroopsNum} = checkWinning(countryTroopNums[attackingCountryName], countryTroopNums[defendingCountryName]);
+
+    addTroopsToCurrentPlayerCountry(attackingCountryName, attackingTroopsNum - countryTroopNums[attackingCountryName]);
+    if (!defendingTroopsNum)
+        displayWinningDialog(attackingCountryName, defendingCountryName);
+    else {
+        _.forEach(gameState.players, playerInfo => {
+            if (defendingCountryName in playerInfo.countries) {
+                playerInfo.countries[defendingCountryName] = defendingTroopsNum;
+                $(`#${countriesJson[defendingCountryName].id}Text`, svgDoc).text(defendingTroopsNum);
+            }
+        });
+        makeCurrentPlayerCountriesResponsive();
+    }
+}
+
 function makeCurrentPlayerCountriesResponsive() {
     $('.country', svgDoc).unbind();
 
     const currentPlayerCountries = _.keys(gameState.players[gameState.currentPlayer].countries);
-    $(_.join(_.map(currentPlayerCountries, c => `[id='${c}']`), ', '), svgDoc).on(_.defaults(stages[currentStageIndex].mouseListeners, {
+    $(_.join(_.map(currentPlayerCountries, c => `[id='${c}']`), ', '), svgDoc).on({
+        click: stages[currentStageIndex].click,
         mouseenter: mouseEnterCountry,
         mouseleave: mouseLeaveCountry
-    }));
+    });
 }
 
 function advanceStage() {
