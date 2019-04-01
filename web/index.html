@@ -26,15 +26,21 @@
                 </object>
 
                 <div id="gameInfo">
-                    <h2 id="countryName" hidden>Move mouse over a country</h2>
-
                     <fieldset id="legend">
                         <legend>Players:</legend>
                         <ul id="legendList">
                         </ul>
                     </fieldset>
 
-                    <h2 hidden>You have <b id="troopsToDistribute"></b> troops left to distribute</h2>
+                    <div id="currentPlayerInfo" hidden>
+                        <h2 id="countryName">Move mouse over a country</h2>
+
+                        <h2>You have <b id="troopsToDistribute"></b> troops left to distribute</h2>
+
+                        <h2 id="stageName"></h2>
+                        <button class="ui-button ui-corner-all ui-widget" onclick="advanceStage()">Advance to next stage -></button>
+
+                    </div>
 
                     <div id="numberInputDialog" hidden>
                         <span id="dialogText"></span>
