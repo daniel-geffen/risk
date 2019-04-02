@@ -12,10 +12,19 @@ const sliderDefaultOptions = {
 let webSocket, svgDoc, countriesJson, gameState, username, currentStageIndex = -1;
 $.getJSON('countries.json', obj => countriesJson = obj);
 
-function addTroopsToCurrentPlayerCountry(countryName, troopsToAdd) {
+function addTroopsToCurrentPlayerCountry(countryName, troopsToAdd, shouldAnimate = true) {
     const currentPlayerCountries = gameState.players[gameState.currentPlayer].countries;
+    const initial = {troops: (currentPlayerCountries[countryName] || 0)};
     currentPlayerCountries[countryName] = (currentPlayerCountries[countryName] || 0) + troopsToAdd;
-    $(`#${countriesJson[countryName].id}Text`, svgDoc).text(currentPlayerCountries[countryName]);
+    if (shouldAnimate) {
+        $(initial).animate({troops: currentPlayerCountries[countryName]}, {
+            duration: 1000,
+            easing: 'linear',
+            step: num => $(`#${countriesJson[countryName].id}Text`, svgDoc).text(Math.floor(num))
+        });
+    } else {
+        $(`#${countriesJson[countryName].id}Text`, svgDoc).text(currentPlayerCountries[countryName]);
+    }
 }
 
 function getLinkedCurrentPlayerCountries(countryId, checkedCountries = [countryId]) {
@@ -30,7 +39,7 @@ const stages = [
         name: 'Draft',
         click: evt => {
             if (gameState.newTroops > 0) {
-                addTroopsToCurrentPlayerCountry($(evt.target).attr('id'), 1);
+                addTroopsToCurrentPlayerCountry($(evt.target).attr('id'), 1, false);
                 $('#troopsToDistribute').text(--gameState.newTroops);
             }
         }
@@ -175,19 +184,30 @@ function mouseClickNeighbor(attackingCountryName, evt) {
     const countryTroopNums = _.assign({}, ..._.map(gameState.players, v => v.countries));
     const defendingCountryName = $(evt.target).attr('id');
     const {attackingTroopsNum, defendingTroopsNum} = checkWinning(countryTroopNums[attackingCountryName], countryTroopNums[defendingCountryName]);
-
-    addTroopsToCurrentPlayerCountry(attackingCountryName, attackingTroopsNum - countryTroopNums[attackingCountryName]);
-    if (!defendingTroopsNum)
-        displayWinningDialog(attackingCountryName, defendingCountryName);
-    else {
-        _.forEach(gameState.players, playerInfo => {
-            if (defendingCountryName in playerInfo.countries) {
-                playerInfo.countries[defendingCountryName] = defendingTroopsNum;
-                $(`#${countriesJson[defendingCountryName].id}Text`, svgDoc).text(defendingTroopsNum);
+    $('#whoWon').text(`You ${(!defendingTroopsNum ? 'Won' : 'Lost')}!`);
+    $('#offense').text('Remaining offense troops: ' + attackingTroopsNum);
+    $('#defense').text('Remaining defense troops: ' + defendingTroopsNum);
+    $('#attackResultsDialog').dialog(_.defaults({
+        buttons: {
+            'Continue': () => {
+                $('#attackResultsDialog').dialog('close');
+                addTroopsToCurrentPlayerCountry(attackingCountryName, attackingTroopsNum - countryTroopNums[attackingCountryName]);
+                if (!defendingTroopsNum)
+                    displayWinningDialog(attackingCountryName, defendingCountryName);
+                else {
+                    _.forEach(gameState.players, playerInfo => {
+                        if (defendingCountryName in playerInfo.countries) {
+                            playerInfo.countries[defendingCountryName] = defendingTroopsNum;
+                            $(`#${countriesJson[defendingCountryName].id}Text`, svgDoc).text(defendingTroopsNum);
+                        }
+                    });
+                    makeCurrentPlayerCountriesResponsive();
+                }
             }
-        });
-        makeCurrentPlayerCountriesResponsive();
-    }
+        },
+        dialogClass: 'remove-close',
+        closeOnEscape: false
+    }, dialogDefaultOptions));
 }
 
 function mouseClickCountryToFortify(fortifyingCountryName, evt) {
