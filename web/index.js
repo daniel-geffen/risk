@@ -210,16 +210,31 @@ function mouseClickNeighbor(attackingCountryName, evt) {
     }, dialogDefaultOptions));
 }
 
+function finishTurn() {
+    $('.country', svgDoc).unbind();
+    $('#newHighlight', svgDoc).hide();
+    $('#currentPlayerInfo').hide();
+
+    const gameStateToSend = _.pick(_.clone(gameState), ['gameId', 'players']);
+    _.forEach(gameStateToSend.players, playerCountries => {
+        playerCountries.countries = _.mapKeys(playerCountries.countries, (troops, country) => countriesJson[country].id);
+    });
+
+    webSocket.send(JSON.stringify(gameStateToSend));
+}
+
 function mouseClickCountryToFortify(fortifyingCountryName, evt) {
     initSliderToMoveTroopsFrom(fortifyingCountryName);
     $('#dialogText').text('Enter number of troops to move to this country:');
     $('#numberInputDialog').dialog(_.defaults({
+        title: 'Fortify Troops',
         buttons: {
             'Done': () => {
                 $('#numberInputDialog').dialog('close');
                 const troopsToMove = $('#numberSlider').slider('value');
                 addTroopsToCurrentPlayerCountry(fortifyingCountryName, -troopsToMove);
                 addTroopsToCurrentPlayerCountry($(evt.target).attr('id'), troopsToMove);
+                finishTurn();
             }
         }
     }, dialogDefaultOptions));
@@ -254,13 +269,17 @@ function addPlayerListItem(playerData, playerName, message) {
 function paintCountry(color, numOfTroops, countryName) {
     const country = $(`[id='${countryName}']`, svgDoc);
     country.attr('fill', color);
-    const boundingBox = country[0].getBBox();
-    const textElement = $(document.createElementNS('http://www.w3.org/2000/svg', 'text')).attr({
-        id: `${countriesJson[countryName].id}Text`,
-        transform: `translate(${boundingBox.x + boundingBox.width / 2} ${boundingBox.y + boundingBox.height / 2})`,
-        class: 'countryText'
-    }).text(numOfTroops);
-    country.parent().after(textElement);
+
+    if (!$(`#${countriesJson[countryName].id}Text`, svgDoc).length) {
+        const boundingBox = country[0].getBBox();
+        country.parent().after($(document.createElementNS('http://www.w3.org/2000/svg', 'text')).attr({
+            id: `${countriesJson[countryName].id}Text`,
+            transform: `translate(${boundingBox.x + boundingBox.width / 2} ${boundingBox.y + boundingBox.height / 2})`,
+            class: 'countryText'
+        }));
+    }
+
+    $(`#${countriesJson[countryName].id}Text`, svgDoc).text(numOfTroops);
 }
 
 function onServerMessage(evt) {
@@ -272,6 +291,7 @@ function onServerMessage(evt) {
         $('#currentPlayerInfo').show();
         advanceStage();
     }
+    $('#legendList').empty();
     _.forEach(gameState.players, (playerData, playerName) => {
         addPlayerListItem(playerData, playerName, gameState);
         _.forEach(playerData.countries, _.partial(paintCountry, playerData.color));
