@@ -5,13 +5,14 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @ServerEndpoint("/ws")
 public class GameServer {
 
-    private static List<GameManager> games = Arrays.asList(new GameManager());
+    private static List<GameManager> games = new ArrayList<GameManager>() {{
+        add(new GameManager());
+    }};
 
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
