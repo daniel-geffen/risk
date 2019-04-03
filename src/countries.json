@@ -112,7 +112,7 @@
   {
     "name": "East Africa",
     "continent": "Africa",
-    "neighbors": [21, 20, 23, 24, 25]
+    "neighbors": [21, 20, 23, 24, 25, 35]
   },
   {
     "name": "Congo",
@@ -122,12 +122,12 @@
   {
     "name": "South Africa",
     "continent": "Africa",
-    "neighbors": [22, 23]
+    "neighbors": [22, 23, 25]
   },
   {
     "name": "Madagascar",
     "continent": "Africa",
-    "neighbors": [22]
+    "neighbors": [22, 24]
   },
   {
     "name": "Ural",
@@ -177,7 +177,7 @@
   {
     "name": "Middle East",
     "continent": "Asia",
-    "neighbors": [36, 33, 16, 18, 21]
+    "neighbors": [36, 33, 16, 18, 21, 22]
   },
   {
     "name": "India",
