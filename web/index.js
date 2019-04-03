@@ -9,7 +9,7 @@ const sliderDefaultOptions = {
     slide: (event, ui) => $('#sliderHandle').text(ui.value)
 };
 
-let webSocket, svgDoc, countriesJson, gameState, username, currentStageIndex = -1;
+let webSocket, svgDoc, countriesJson, gameState, username, currentStageIndex;
 $.getJSON('countries.json', obj => countriesJson = obj);
 
 function addTroopsToCurrentPlayerCountry(countryName, troopsToAdd, shouldAnimate = true) {
@@ -18,7 +18,7 @@ function addTroopsToCurrentPlayerCountry(countryName, troopsToAdd, shouldAnimate
     currentPlayerCountries[countryName] = (currentPlayerCountries[countryName] || 0) + troopsToAdd;
     if (shouldAnimate) {
         $(initial).animate({troops: currentPlayerCountries[countryName]}, {
-            duration: 1000,
+            duration: 500,
             easing: 'linear',
             step: num => $(`#${countriesJson[countryName].id}Text`, svgDoc).text(Math.floor(num))
         });
@@ -171,7 +171,7 @@ function displayWinningDialog(attackingCountryName, defendingCountryName) {
         title: 'You Won!',
         buttons: {
             'Done': () => {
-                $('#numberInputDialog').dialog('close');
+                $('#numberInputDialog').dialog('destroy');
                 conquerCountry(attackingCountryName, defendingCountryName, $('#numberSlider').slider('value'));
             }
         },
@@ -230,7 +230,7 @@ function mouseClickCountryToFortify(fortifyingCountryName, evt) {
         title: 'Fortify Troops',
         buttons: {
             'Done': () => {
-                $('#numberInputDialog').dialog('close');
+                $('#numberInputDialog').dialog('destroy');
                 const troopsToMove = $('#numberSlider').slider('value');
                 addTroopsToCurrentPlayerCountry(fortifyingCountryName, -troopsToMove);
                 addTroopsToCurrentPlayerCountry($(evt.target).attr('id'), troopsToMove);
@@ -252,9 +252,14 @@ function makeCurrentPlayerCountriesResponsive() {
 }
 
 function advanceStage() {
-    const currentStage = stages[++currentStageIndex];
-    $('#stageName').text(`${currentStage.name} Stage`);
-    makeCurrentPlayerCountriesResponsive();
+    currentStageIndex++;
+    if (currentStageIndex < stages.length) {
+        const currentStage = stages[currentStageIndex];
+        $('#stageName').text(`${currentStage.name} Stage`);
+        makeCurrentPlayerCountriesResponsive();
+    } else {
+        finishTurn();
+    }
 }
 
 function addPlayerListItem(playerData, playerName, message) {
@@ -287,6 +292,7 @@ function onServerMessage(evt) {
 
     $('#title').text(`${gameState.currentPlayer}'s turn`);
     if (gameState.currentPlayer === username) {
+        currentStageIndex = -1;
         $('#troopsToDistribute').text(gameState.newTroops);
         $('#currentPlayerInfo').show();
         advanceStage();
