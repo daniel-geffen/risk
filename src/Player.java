@@ -74,4 +74,8 @@ public class Player {
         }
         return Math.max(this.countries.size() / 3 + continentBonuses, 3);
     }
+
+    public boolean hasLost() {
+        return this.countries.isEmpty();
+    }
 }

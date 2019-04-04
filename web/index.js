@@ -139,7 +139,14 @@ function conquerCountry(attackingCountryName, defendingCountryName, troopsToMove
 
     $(`#${countriesJson[defendingCountryName].id}`, svgDoc).remove();
     $(`[id='${defendingCountryName}']`, svgDoc).attr('fill', gameState.players[gameState.currentPlayer].color);
+
     makeCurrentPlayerCountriesResponsive();
+    
+    const winnerName = _.findKey(gameState.players, playerData => _.size(playerData.countries) === _.size(countriesJson));
+    if (winnerName) {
+        $('#title').text(`${winnerName} has won the game!`);
+        finishTurn();
+    }
 }
 
 function checkWinning(attackingTroopsNum, defendingTroopsNum) {
@@ -264,10 +271,9 @@ function advanceStage() {
 
 function addPlayerListItem(playerData, playerName, message) {
     const listItem = $(`<li class="legendItem" />`).css('color', playerData.color).text(playerName);
-    if (playerName === message.currentPlayer)
-        listItem.addClass('selectedLegendItem');
-    if (playerName === username)
-        listItem.addClass('userLegendItem');
+    if (playerName === message.currentPlayer) listItem.addClass('selectedLegendItem');
+    if (playerName === username) listItem.addClass('userLegendItem');
+    if (_.isEmpty(gameState.players[playerName].countries)) listItem.addClass('loserLegendItem');
     $('#legendList').append(listItem);
 }
 
@@ -291,18 +297,21 @@ function onServerMessage(evt) {
     gameState = JSON.parse(evt.data);
 
     $('#title').text(`${gameState.currentPlayer}'s turn`);
-    if (gameState.currentPlayer === username) {
-        currentStageIndex = -1;
-        $('#troopsToDistribute').text(gameState.newTroops);
-        $('#currentPlayerInfo').show();
-        advanceStage();
-    }
     $('#legendList').empty();
     _.forEach(gameState.players, (playerData, playerName) => {
         addPlayerListItem(playerData, playerName, gameState);
         _.forEach(playerData.countries, _.partial(paintCountry, playerData.color));
     });
 
+    const winnerName = _.findKey(gameState.players, playerData => _.size(playerData.countries) === _.size(countriesJson));
+    if (winnerName) {
+        $('#title').text(`${winnerName} has won the game!`);
+    } else if (gameState.currentPlayer === username) {
+        currentStageIndex = -1;
+        $('#troopsToDistribute').text(gameState.newTroops);
+        $('#currentPlayerInfo').show();
+        advanceStage();
+    }
 }
 
 function init() {

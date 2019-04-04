@@ -8,7 +8,6 @@ import java.util.*;
 
 public class GameManager {
     private static final String mapFilename = "/Users/tuvia/IdeaProjects/Risk/src/countries.json";
-    private static final int initialTroops = 35;
     private static final int numOfPlayers = 3;
     private static int gameIdCounter = 0;
     private static final Map<String, Integer> continentBonuses = new HashMap<String, Integer>() {{
@@ -22,6 +21,7 @@ public class GameManager {
 
     private int gameId;
     private int turnNumber;
+    private int currentPlayerId;
     private List<Player> players;
     private List<String> playerColors = Arrays.asList("rgb(58,118,207)", "rgb(100,61,166)", "rgb(42,175,157)", "rgb(108,126,83)", "rgb(55,101,206)", "rgb(34,135,174)");
     private Country[] countries;
@@ -65,7 +65,8 @@ public class GameManager {
 
     public GameManager() {
         this.gameId = gameIdCounter++;
-        this.turnNumber = 0;
+        this.turnNumber = -1;
+        this.currentPlayerId = -1;
         this.players = new ArrayList<>();
         Collections.shuffle(this.playerColors);
         this.countries = getCountryArray();
@@ -90,6 +91,7 @@ public class GameManager {
     }
 
     public void dealCountries() {
+        int initialTroops = 35 - (numOfPlayers - 3) * 5;
         List<Country> countriesToDeal = new ArrayList<>(Arrays.asList(countries));
         Collections.shuffle(countriesToDeal);
         for (int i = 0; i < this.players.size(); i++) {
@@ -98,6 +100,11 @@ public class GameManager {
     }
 
     private String createTurnJSON() {
+        this.turnNumber++;
+        do
+            this.currentPlayerId = (this.currentPlayerId + 1) % numOfPlayers;
+        while (this.players.get(this.currentPlayerId).hasLost());
+
         JSONObject turnObj = new JSONObject();
         turnObj.put("gameId", this.gameId);
 
@@ -107,9 +114,9 @@ public class GameManager {
         }
 
         turnObj.put("players", playersObj);
-        Player currentPlayer = this.players.get(this.turnNumber++ % numOfPlayers);
+        Player currentPlayer = this.players.get(this.currentPlayerId);
         turnObj.put("currentPlayer", currentPlayer.getName());
-        turnObj.put("newTroops", currentPlayer.getNumberOfNewTroops(continents.values()));
+        turnObj.put("newTroops", currentPlayer.getNumberOfNewTroops(this.continents.values()));
 
         return turnObj.toString();
     }

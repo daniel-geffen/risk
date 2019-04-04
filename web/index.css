@@ -62,6 +62,10 @@ input {
     font-style: italic;
 }
 
+.loserLegendItem {
+    text-decoration: line-through;
+}
+
 #countryInfo {
     text-align: center;
     display: flex;
