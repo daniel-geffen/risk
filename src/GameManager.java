@@ -20,7 +20,6 @@ public class GameManager {
     }};
 
     private int gameId;
-    private int turnNumber;
     private int currentPlayerId;
     private List<Player> players;
     private List<String> playerColors = Arrays.asList("rgb(58,118,207)", "rgb(100,61,166)", "rgb(42,175,157)", "rgb(108,126,83)", "rgb(55,101,206)", "rgb(34,135,174)");
@@ -65,7 +64,6 @@ public class GameManager {
 
     public GameManager() {
         this.gameId = gameIdCounter++;
-        this.turnNumber = -1;
         this.currentPlayerId = -1;
         this.players = new ArrayList<>();
         Collections.shuffle(this.playerColors);
@@ -100,7 +98,6 @@ public class GameManager {
     }
 
     private String createTurnJSON() {
-        this.turnNumber++;
         do
             this.currentPlayerId = (this.currentPlayerId + 1) % numOfPlayers;
         while (this.players.get(this.currentPlayerId).hasLost());
