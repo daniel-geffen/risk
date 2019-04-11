@@ -45,7 +45,7 @@ public class GameManager {
             for (Object n: obj.getJSONArray("neighbors"))
                 neighbors.add((Integer) n);
 
-            countries[i] = new Country(obj.getString("name"), obj.getString("continent"), neighbors);
+            countries[i] = new Country(i, obj.getString("name"), obj.getString("continent"), neighbors);
         }
 
         return countries;

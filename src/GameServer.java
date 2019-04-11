@@ -17,7 +17,7 @@ public class GameServer {
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
         JSONObject messageObj = new JSONObject(message);
-        if (messageObj.keySet().contains("gameId")) {
+        if (messageObj.has("gameId")) {
             GameManager game = games.get(messageObj.getInt("gameId"));
             game.updateGame(messageObj);
             game.sendStateToAllPlayers();
