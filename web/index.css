@@ -51,11 +51,12 @@ input {
 .legendItem {
     margin: 20px 0;
     font-size: 20px;
+    text-shadow: -1px 0 black, 0 1px black;
 }
 
 .selectedLegendItem {
     font-weight: bold;
-    font-size: 28px;
+    font-size: 32px;
 }
 
 .userLegendItem {

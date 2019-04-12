@@ -22,7 +22,7 @@ public class GameManager {
     private int gameId;
     private int currentPlayerId;
     private List<Player> players;
-    private List<String> playerColors = Arrays.asList("rgb(58,118,207)", "rgb(100,61,166)", "rgb(42,175,157)", "rgb(108,126,83)", "rgb(55,101,206)", "rgb(34,135,174)");
+    private List<String> playerColors = Arrays.asList("rgb(58,118,207)", "rgb(100,61,166)", "rgb(134,30,22)", "rgb(222,65,118)", "rgb(28,138,101)", "rgb(90,90,90)");
     private Country[] countries;
     private Map<String, Continent> continents;
 
