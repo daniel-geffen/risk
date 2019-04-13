@@ -18,6 +18,7 @@
           stroke: white;
           font-size: 20px;
           pointer-events: none;
+          user-select: none;
       }
 
       .neighbor {
