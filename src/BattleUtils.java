@@ -6,11 +6,19 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+/**
+ * A class with static functions used for handling battles in the game.
+ */
 public class BattleUtils {
+    private static final int numOfSimulations = 10000; // The number of simulations that should be run in the monte carlo algorithm.
+    private static Map<Pair<Integer, Integer>, Float> cache = new HashMap<>(); // A map for the cache of the percentageOfWinning function.
 
-    private static final int numOfSimulations = 10000;
-    private static Map<Pair<Integer, Integer>, Float> cache = new HashMap<>();
-
+    /**
+     * Simulates a battle (with dice). Simulates rounds until the defense is out of troops or the offense has only 1 left.
+     * @param numOfAttackingTroops The number of troops on the attacking country.
+     * @param numOfDefendingTroops The number of troops on the defending country.
+     * @return A pair with the remaining number of troops on each side of the battle.
+     */
     public static Pair<Integer, Integer> simulateBattle(int numOfAttackingTroops, int numOfDefendingTroops) {
         Random random = new Random();
 
@@ -29,6 +37,14 @@ public class BattleUtils {
         return new Pair<>(numOfAttackingTroops, numOfDefendingTroops);
     }
 
+    /**
+     * Implementation of the monte carlo algorithm, to determine the probability of the attacker winning a battle in the game.
+     * Runs a large number of simulations and counts number of wins and number of losses for the attacker.
+     * The return values of the function are cached, so that a large number of simulations is only ran for new parameters.
+     * @param numOfAttackingTroops The number of troops on the attacking country.
+     * @param numOfDefendingTroops The number of troops on the defending country.
+     * @return The probability the attacker wins the battle.
+     */
     public static float percentageOfWinning(int numOfAttackingTroops, int numOfDefendingTroops) {
         Pair<Integer, Integer> pair = new Pair<>(numOfAttackingTroops, numOfDefendingTroops);
         if (cache.containsKey(pair)) return cache.get(pair);
