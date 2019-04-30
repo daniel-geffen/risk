@@ -26,10 +26,6 @@ public class Country {
         return this.name;
     }
 
-    public Continent getContinent() {
-        return this.continent;
-    }
-
     /**
      * Occupy the country - set both a new owner and a new number of troops.
      * @param owner The new player that controls the country.
@@ -84,7 +80,7 @@ public class Country {
      * @param countries The countries array.
      * @return A stack with the countries creating the shortest path. The first country is the first country to conquer.
      */
-    public Stack<Country> getDistanceFromRival(Country countryToFind, Country[] countries) {
+    public Stack<Country> getPathToRival(Country countryToFind, Country[] countries) {
         Map<Integer, Node> graph = createInitialGraph(countries);
 
         Node pathNode = graph.get(countryToFind.id);

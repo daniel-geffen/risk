@@ -3,7 +3,6 @@ import org.json.JSONObject;
 import javax.websocket.OnMessage;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class GameServer {
      * Finds the relevant game using the game id, updates it with the new state and sends the new state to all the players.
      * @param messageObj The json object with the new state of the game.
      */
-    private void updateGameOfExistingPlayer(JSONObject messageObj) {
+    private static void updateGameOfExistingPlayer(JSONObject messageObj) {
         GameManager game = games.get(messageObj.getInt("gameId"));
         game.updateGame(messageObj);
         game.sendStateToAllPlayers();
@@ -33,7 +32,7 @@ public class GameServer {
      * @param session The socket of the new player.
      * @param name The name of the new player.
      */
-    private void addNewPlayerToGame(Session session, String name) {
+    private static void addNewPlayerToGame(Session session, String name) {
         GameManager game = games.get(games.size() - 1);
         game.addPlayer(name, session);
 
@@ -52,7 +51,7 @@ public class GameServer {
      * @param session The socket used to communicate with the player.
      */
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public static void onMessage(String message, Session session) {
         JSONObject messageObj = new JSONObject(message);
         if (messageObj.has("gameId")) updateGameOfExistingPlayer(messageObj);
         else addNewPlayerToGame(session, messageObj.getString("username"));
