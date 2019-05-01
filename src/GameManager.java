@@ -92,8 +92,8 @@ public class GameManager {
      * @param name The name of the player.
      * @param socket The socket to communicate with the player.
      */
-    public void addPlayer(String name, Session socket) {
-        this.players.add(new Player(name, socket, this.playerColors.get(this.players.size())));
+    public void addHumanPlayer(String name, Session socket) {
+        this.players.add(new HumanPlayer(name, this.playerColors.get(this.players.size()), socket));
     }
 
     /**
@@ -161,6 +161,7 @@ public class GameManager {
     public void sendStateToAllPlayers() {
         String turnJSON = this.createTurnJSON();
         for (Player player : this.players)
-            player.send(turnJSON);
+            if (player instanceof HumanPlayer)
+                ((HumanPlayer) player).send(turnJSON);
     }
 }

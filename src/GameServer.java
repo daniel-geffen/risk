@@ -34,7 +34,7 @@ public class GameServer {
      */
     private static void addNewPlayerToGame(Session session, String name) {
         GameManager game = games.get(games.size() - 1);
-        game.addPlayer(name, session);
+        game.addHumanPlayer(name, session);
 
         if (game.readyToStart()) {
             game.dealCountries();

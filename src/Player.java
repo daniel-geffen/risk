@@ -1,37 +1,24 @@
 import org.json.JSONObject;
 
-import javax.websocket.Session;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 /**
  * A class representing a player in the game.
  */
 public class Player {
     private String name; // The name of the player.
-    private Session socket; // The socket used to communicate with the player.
     private String color; // The color of the player.
     private List<Country> countries; // A list of the countries the player occupies.
 
     /**
      * A constructor that sets object variables.
      */
-    public Player(String name, Session socket, String color) {
+    public Player(String name, String color) {
         this.name = name;
-        this.socket = socket;
         this.color = color;
-    }
-
-    /**
-     * Sends the message to the player using his socket.
-     * @param message The message to send.
-     */
-    public void send(String message) {
-        try {
-            this.socket.getBasicRemote().sendText(message);
-        } catch (IOException e) {
-            System.out.println(e.toString());
-        }
     }
 
     public String getName() {
