@@ -118,6 +118,9 @@ public class GameManager {
         return this.players.size() == numOfHumanPlayers;
     }
 
+    /**
+     * Adds AI players to start the game.
+     */
     public void addAIPlayers() {
         for (int i = 0; i < numOfAIPlayers; i++)
             this.players.add(new AIPlayer(i + 1, this.playerColors.get(this.players.size()), this));
