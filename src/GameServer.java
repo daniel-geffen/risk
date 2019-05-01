@@ -23,7 +23,7 @@ public class GameServer {
     private static void updateGameOfExistingPlayer(JSONObject messageObj) {
         GameManager game = games.get(messageObj.getInt("gameId"));
         game.updateGame(messageObj);
-        game.sendStateToAllPlayers();
+        game.finishTurn();
     }
 
     /**
@@ -37,8 +37,9 @@ public class GameServer {
         game.addHumanPlayer(name, session);
 
         if (game.readyToStart()) {
+            game.addAIPlayers();
             game.dealCountries();
-            game.sendStateToAllPlayers();
+            game.finishTurn();
 
             games.add(new GameManager());
         }

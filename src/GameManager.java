@@ -8,7 +8,8 @@ import java.util.*;
 
 public class GameManager {
     private static final String mapFilename = "/Users/tuvia/IdeaProjects/Risk/src/countries.json"; // The path to the map json file.
-    private static final int numOfPlayers = 3; // The number of players in a game.
+    private static final int numOfHumanPlayers = 2; // The number of human players in a game.
+    private static final int numOfAIPlayers = 2; // The number of AI players in a game.
     private static final Map<String, Integer> continentBonuses = new HashMap<String, Integer>() {{
         put("Africa", 3);
         put("Asia", 7);
@@ -114,14 +115,19 @@ public class GameManager {
      * @return Whether there are enough players to start the game.
      */
     public boolean readyToStart() {
-        return this.players.size() == numOfPlayers;
+        return this.players.size() == numOfHumanPlayers;
+    }
+
+    public void addAIPlayers() {
+        for (int i = 0; i < numOfAIPlayers; i++)
+            this.players.add(new AIPlayer(i + 1, this.playerColors.get(this.players.size()), this));
     }
 
     /**
      * Deals the countries randomly between the players and gives them the number of initial troops they have at the beginning of the game (depends on number of players).
      */
     public void dealCountries() {
-        int initialTroops = 50 - numOfPlayers * 5;
+        int initialTroops = 50 - (numOfHumanPlayers + numOfAIPlayers) * 5;
         List<Country> countriesToDeal = new ArrayList<>(Arrays.asList(this.countries));
         Collections.shuffle(countriesToDeal);
         for (int i = 0; i < this.players.size(); i++) {
@@ -136,7 +142,7 @@ public class GameManager {
      */
     private String createTurnJSON() {
         do
-            this.currentPlayerId = (this.currentPlayerId + 1) % numOfPlayers;
+            this.currentPlayerId = (this.currentPlayerId + 1) % (numOfHumanPlayers + numOfAIPlayers);
         while (this.players.get(this.currentPlayerId).hasLost());
 
         JSONObject turnObj = new JSONObject();
@@ -158,10 +164,14 @@ public class GameManager {
     /**
      * Sends the current state of the game to all the players.
      */
-    public void sendStateToAllPlayers() {
+    public void finishTurn() {
         String turnJSON = this.createTurnJSON();
         for (Player player : this.players)
             if (player instanceof HumanPlayer)
                 ((HumanPlayer) player).send(turnJSON);
+
+        Player currentPlayer = this.players.get(this.currentPlayerId);
+        if (currentPlayer instanceof AIPlayer)
+            ((AIPlayer) currentPlayer).doTurn();
     }
 }
