@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * A class representing a player in the game.
  */
-public class Player {
+public abstract class Player {
     private String name; // The name of the player.
     private String color; // The color of the player.
     private List<Country> countries; // A list of the countries the player occupies.
