@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
  * A class with static functions used for handling battles in the game.
  */
 public class BattleUtils {
-    private static final int numOfSimulations = 1000; // The number of simulations that should be run in the monte carlo algorithm.
+    private static final int NUM_OF_SIMULATIONS = 1000; // The number of simulations that should be run in the monte carlo algorithm.
     private static Map<Pair<Integer, Integer>, Float> cache = new HashMap<>(); // A map for the cache of the percentageOfWinning function.
 
     /**
@@ -47,15 +47,15 @@ public class BattleUtils {
      */
     public static float percentageOfWinning(int numOfAttackingTroops, int numOfDefendingTroops) {
         Pair<Integer, Integer> pair = new Pair<>(numOfAttackingTroops, numOfDefendingTroops);
-        if (cache.containsKey(pair)) return cache.get(pair);
+        if (BattleUtils.cache.containsKey(pair)) return BattleUtils.cache.get(pair);
 
         int countAttackWins = 0;
-        for (int i = 0; i < numOfSimulations; i++) {
+        for (int i = 0; i < BattleUtils.NUM_OF_SIMULATIONS; i++) {
             int defendingTroopsAfterBattle = simulateBattle(numOfAttackingTroops, numOfDefendingTroops).getValue();
             if (defendingTroopsAfterBattle == 0) countAttackWins++;
         }
 
-        float result = (float) countAttackWins / numOfSimulations;
+        float result = (float) countAttackWins / BattleUtils.NUM_OF_SIMULATIONS;
         cache.put(pair, result);
         return result;
     }

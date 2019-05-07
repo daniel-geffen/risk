@@ -101,19 +101,20 @@ public class Country implements Comparable<Country> {
         Map<Integer, Node> graph = createInitialGraph(countries);
 
         Node pathNode = graph.get(countryToFind.id);
-        while (!graph.isEmpty()) {
-            Node node = Collections.min(graph.values());
-            graph.remove(node.getCountry().id);
-            if (node.getCountry() != countryToFind && node.getDistance() < pathNode.getDistance()) {
-                for (int neighbor : node.getCountry().neighbors) {
-                    if (graph.containsKey(neighbor)) {
-                        Node neighborNode = graph.get(neighbor);
-                        if (node.getDistance() + neighborNode.getCountry().numOfTroops < neighborNode.getDistance())
-                            neighborNode.setNewPath(node, node.getDistance() + neighborNode.getCountry().numOfTroops);
+        if (pathNode != null)
+            while (!graph.isEmpty()) {
+                Node node = Collections.min(graph.values());
+                graph.remove(node.getCountry().id);
+                if (node.getCountry() != countryToFind && node.getDistance() < pathNode.getDistance()) {
+                    for (int neighbor : node.getCountry().neighbors) {
+                        if (graph.containsKey(neighbor)) {
+                            Node neighborNode = graph.get(neighbor);
+                            if (node.getDistance() + neighborNode.getCountry().numOfTroops < neighborNode.getDistance())
+                                neighborNode.setNewPath(node, node.getDistance() + neighborNode.getCountry().numOfTroops);
+                        }
                     }
                 }
             }
-        }
         return pathNode;
     }
 
@@ -127,10 +128,11 @@ public class Country implements Comparable<Country> {
     public Stack<Country> getPathToRival(Country countryToFind, Country[] countries) {
         Node pathNode = createDijkstraGraph(countryToFind, countries);
         Stack<Country> path = new Stack<>();
-        while (pathNode.getPrevNode() != null) {
-            path.push(pathNode.getCountry());
-            pathNode = pathNode.getPrevNode();
-        }
+        if (pathNode != null)
+            while (pathNode.getPrevNode() != null) {
+                path.push(pathNode.getCountry());
+                pathNode = pathNode.getPrevNode();
+            }
 
         return path;
     }
@@ -139,14 +141,32 @@ public class Country implements Comparable<Country> {
         Country closestBorder = null;
         int distanceOfClosestBorder = Integer.MAX_VALUE;
         for (Country border : continent.getBorders()) {
-            int distanceOfBorder = createDijkstraGraph(border, countries).getDistance();
-            if (distanceOfBorder < distanceOfClosestBorder) {
-                closestBorder = border;
-                distanceOfClosestBorder = distanceOfBorder;
+            Node graphNode = createDijkstraGraph(border, countries);
+            if (graphNode != null) {
+                int distanceOfBorder = graphNode.getDistance();
+                if (distanceOfBorder < distanceOfClosestBorder) {
+                    closestBorder = border;
+                    distanceOfClosestBorder = distanceOfBorder;
+                }
             }
         }
 
         return closestBorder;
+    }
+
+    public int getDistanceFromContinent(Continent continent, Country[] countries) {
+        int distanceOfClosestBorder = Integer.MAX_VALUE;
+        for (Country border : continent.getBorders()) {
+            Node graphNode = createDijkstraGraph(border, countries);
+            if (graphNode != null) {
+                int distanceOfBorder = graphNode.getDistance();
+                if (distanceOfBorder < distanceOfClosestBorder) {
+                    distanceOfClosestBorder = distanceOfBorder;
+                }
+            }
+        }
+
+        return distanceOfClosestBorder == Integer.MAX_VALUE ? 0 : distanceOfClosestBorder;
     }
 
     public boolean attack(Country countryToAttack, boolean moveAllTroopsOnWin) {

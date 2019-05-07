@@ -10,10 +10,10 @@ import java.io.InputStream;
 import java.util.*;
 
 public class GameManager {
-    private static final String mapFilename = "/Users/tuvia/IdeaProjects/Risk/src/countries.json"; // The path to the map json file.
-    private static final int numOfHumanPlayers = 1; // The number of human players in a game.
-    private static final int numOfAIPlayers = 2; // The number of AI players in a game.
-    private static final Map<String, Integer> continentBonuses = new HashMap<String, Integer>() {{
+    private static final String MAP_FILENAME = "/Users/tuvia/IdeaProjects/Risk/src/countries.json"; // The path to the map json file.
+    private static final int NUM_OF_HUMAN_PLAYERS = 1; // The number of human players in a game.
+    private static final int NUM_OF_AI_PLAYERS = 2; // The number of AI players in a game.
+    private static final Map<String, Integer> CONTINENT_BONUSES = new HashMap<String, Integer>() {{
         put("Africa", 3);
         put("Asia", 7);
         put("Europe", 5);
@@ -37,7 +37,7 @@ public class GameManager {
      */
     private static JSONArray readMapFile() {
         try {
-            InputStream inputStream = new FileInputStream(new File(mapFilename));
+            InputStream inputStream = new FileInputStream(new File(GameManager.MAP_FILENAME));
             return new JSONArray(new JSONTokener(inputStream));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -72,8 +72,8 @@ public class GameManager {
      */
     private Map<String, Continent> createContinentsMap() {
         Map<String, Continent> continents = new HashMap<>();
-        for (String continentName : continentBonuses.keySet())
-            continents.put(continentName, new Continent(continentName, continentBonuses.get(continentName)));
+        for (String continentName : GameManager.CONTINENT_BONUSES.keySet())
+            continents.put(continentName, new Continent(continentName, GameManager.CONTINENT_BONUSES.get(continentName)));
 
         return continents;
     }
@@ -82,7 +82,7 @@ public class GameManager {
      * A constructor that initializes a new game.
      */
     public GameManager() {
-        this.gameId = gameIdCounter++;
+        this.gameId = GameManager.gameIdCounter++;
         this.currentPlayerId = -1;
         this.players = new ArrayList<>();
         Collections.shuffle(this.playerColors);
@@ -90,12 +90,12 @@ public class GameManager {
         this.countries = createCountryArray();
     }
 
-    public Collection<Continent> getContinents() {
-        return this.continents.values();
+    public List<Continent> getContinents() {
+        return new ArrayList<>(this.continents.values());
     }
 
     public Country[] getCountries() {
-        return countries;
+        return this.countries;
     }
 
     /**
@@ -126,14 +126,14 @@ public class GameManager {
      * @return Whether there are enough players to start the game.
      */
     public boolean readyToStart() {
-        return this.players.size() == numOfHumanPlayers;
+        return this.players.size() == GameManager.NUM_OF_HUMAN_PLAYERS;
     }
 
     /**
      * Adds AI players to start the game.
      */
     public void addAIPlayers() {
-        for (int i = 0; i < numOfAIPlayers; i++)
+        for (int i = 0; i < GameManager.NUM_OF_AI_PLAYERS; i++)
             this.players.add(new AIPlayer(i + 1, this.playerColors.get(this.players.size()), this));
     }
 
@@ -141,7 +141,7 @@ public class GameManager {
      * Deals the countries randomly between the players and gives them the number of initial troops they have at the beginning of the game (depends on number of players).
      */
     public void dealCountries() {
-        int initialTroops = 50 - (numOfHumanPlayers + numOfAIPlayers) * 5;
+        int initialTroops = 50 - (GameManager.NUM_OF_HUMAN_PLAYERS + GameManager.NUM_OF_AI_PLAYERS) * 5;
         List<Country> countriesToDeal = new ArrayList<>(Arrays.asList(this.countries));
         Collections.shuffle(countriesToDeal);
         for (int i = 0; i < this.players.size(); i++) {
@@ -156,7 +156,7 @@ public class GameManager {
      */
     private String createTurnJSON() {
         do
-            this.currentPlayerId = (this.currentPlayerId + 1) % (numOfHumanPlayers + numOfAIPlayers);
+            this.currentPlayerId = (this.currentPlayerId + 1) % (GameManager.NUM_OF_HUMAN_PLAYERS + GameManager.NUM_OF_AI_PLAYERS);
         while (this.players.get(this.currentPlayerId).hasLost());
 
         JSONObject turnObj = new JSONObject();

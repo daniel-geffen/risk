@@ -21,7 +21,7 @@ public class GameServer {
      * @param messageObj The json object with the new state of the game.
      */
     private static void updateGameOfExistingPlayer(JSONObject messageObj) {
-        GameManager game = games.get(messageObj.getInt("gameId"));
+        GameManager game = GameServer.games.get(messageObj.getInt("gameId"));
         game.updateGame(messageObj);
         game.finishTurn();
     }
@@ -33,7 +33,7 @@ public class GameServer {
      * @param name The name of the new player.
      */
     private static void addNewPlayerToGame(Session session, String name) {
-        GameManager game = games.get(games.size() - 1);
+        GameManager game = GameServer.games.get(GameServer.games.size() - 1);
         game.addHumanPlayer(name, session);
 
         if (game.readyToStart()) {
@@ -41,7 +41,7 @@ public class GameServer {
             game.dealCountries();
             game.finishTurn();
 
-            games.add(new GameManager());
+            GameServer.games.add(new GameManager());
         }
     }
 
