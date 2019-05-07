@@ -366,16 +366,22 @@ function paintCountry(color, numOfTroops, countryName) {
     const country = $(`[id='${countryName}']`, svgDoc);
     country.attr('fill', color);
 
-    if (!$(`#${countriesJson[countryName].id}Text`, svgDoc).length) {
+    let countryText = $(`#${countriesJson[countryName].id}Text`, svgDoc);
+    if (!countryText.length) {
         const boundingBox = country[0].getBBox();
         country.parent().after($(document.createElementNS('http://www.w3.org/2000/svg', 'text')).attr({
             id: `${countriesJson[countryName].id}Text`,
             transform: `translate(${boundingBox.x + boundingBox.width / 2} ${boundingBox.y + boundingBox.height / 2})`,
             class: 'countryText'
         }));
+        countryText = $(`#${countriesJson[countryName].id}Text`, svgDoc);
     }
 
-    $(`#${countriesJson[countryName].id}Text`, svgDoc).text(numOfTroops);
+    $({troops: parseInt(countryText.text() || '0', 10)}).animate({troops: numOfTroops}, {
+        duration: 500,
+        easing: 'linear',
+        step: num => countryText.text(Math.floor(num))
+    });
 }
 
 /**
