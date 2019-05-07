@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
  * A class with static functions used for handling battles in the game.
  */
 public class BattleUtils {
-    private static final int numOfSimulations = 10000; // The number of simulations that should be run in the monte carlo algorithm.
+    private static final int numOfSimulations = 1000; // The number of simulations that should be run in the monte carlo algorithm.
     private static Map<Pair<Integer, Integer>, Float> cache = new HashMap<>(); // A map for the cache of the percentageOfWinning function.
 
     /**

@@ -1,9 +1,11 @@
+import javafx.util.Pair;
+
 import java.util.*;
 
 /**
  * A class representing a country on the map of the game.
  */
-public class Country {
+public class Country implements Comparable<Country> {
     private int id; // The id of the country, also its index in the countries array in GameManager class.
     private String name; // The name of the country.
     private Continent continent; // The continent the country is in.
@@ -26,18 +28,40 @@ public class Country {
         return this.name;
     }
 
+    public Player getOwner() {
+        return this.owner;
+    }
+
     /**
      * Occupy the country - set both a new owner and a new number of troops.
      * @param owner The new player that controls the country.
      * @param numOfTroops The number of troops that are now in the country.
      */
     public void occupy(Player owner, int numOfTroops) {
+        System.out.println(this.name + " occupied by " + owner.getName() + " with " + numOfTroops);
         this.owner = owner;
         this.numOfTroops = numOfTroops;
     }
 
     public int getNumOfTroops() {
         return this.numOfTroops;
+    }
+
+    public List<Integer> getNeighbors() {
+        return this.neighbors;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public Continent getContinent() {
+        return this.continent;
+    }
+
+    public void addTroops(int troopsToAdd) {
+        System.out.println("Adding " + troopsToAdd + " troops to " + this.name);
+        this.numOfTroops += troopsToAdd;
     }
 
     /**
@@ -73,14 +97,7 @@ public class Country {
         return graph;
     }
 
-    /**
-     * An implementation of the dijkstra algorithm, in order to determine the shortest path from this country to another.
-     * The path can only go through countries controlled by other players.
-     * @param countryToFind The country to find a path to.
-     * @param countries The countries array.
-     * @return A stack with the countries creating the shortest path. The first country is the first country to conquer.
-     */
-    public Stack<Country> getPathToRival(Country countryToFind, Country[] countries) {
+    private Node createDijkstraGraph(Country countryToFind, Country[] countries) {
         Map<Integer, Node> graph = createInitialGraph(countries);
 
         Node pathNode = graph.get(countryToFind.id);
@@ -97,9 +114,18 @@ public class Country {
                 }
             }
         }
+        return pathNode;
+    }
 
-        // pathNode.getDistance() to get the num of troops to kill on the way.
-
+    /**
+     * An implementation of the dijkstra algorithm, in order to determine the shortest path from this country to another.
+     * The path can only go through countries controlled by other players.
+     * @param countryToFind The country to find a path to.
+     * @param countries The countries array.
+     * @return A stack with the countries creating the shortest path. The first country is the first country to conquer.
+     */
+    public Stack<Country> getPathToRival(Country countryToFind, Country[] countries) {
+        Node pathNode = createDijkstraGraph(countryToFind, countries);
         Stack<Country> path = new Stack<>();
         while (pathNode.getPrevNode() != null) {
             path.push(pathNode.getCountry());
@@ -107,5 +133,58 @@ public class Country {
         }
 
         return path;
+    }
+
+    public Country getClosestContinentBorder(Continent continent, Country[] countries) {
+        Country closestBorder = null;
+        int distanceOfClosestBorder = Integer.MAX_VALUE;
+        for (Country border : continent.getBorders()) {
+            int distanceOfBorder = createDijkstraGraph(border, countries).getDistance();
+            if (distanceOfBorder < distanceOfClosestBorder) {
+                closestBorder = border;
+                distanceOfClosestBorder = distanceOfBorder;
+            }
+        }
+
+        return closestBorder;
+    }
+
+    public boolean attack(Country countryToAttack, boolean moveAllTroopsOnWin) {
+        Pair<Integer, Integer> battleResults = BattleUtils.simulateBattle(this.numOfTroops, countryToAttack.numOfTroops);
+        System.out.println("Battle results: " + this.name + " - " + battleResults.getKey() + ", " + countryToAttack.name + " - " + battleResults.getValue());
+        if (battleResults.getValue() == 0) {
+            if (moveAllTroopsOnWin) {
+                this.numOfTroops = 1;
+                countryToAttack.owner.removeCountry(countryToAttack);
+                this.owner.addCountry(countryToAttack, battleResults.getKey() - 1);
+            } else {
+                this.numOfTroops = battleResults.getKey() - 1;
+                countryToAttack.owner.removeCountry(countryToAttack);
+                this.owner.addCountry(countryToAttack, 1);
+            }
+            return true;
+        } else {
+            this.numOfTroops = battleResults.getKey();
+            countryToAttack.numOfTroops = battleResults.getValue();
+            return false;
+        }
+    }
+
+    public boolean goOnAttackJourney(Country destination, Country[] countries) {
+        Stack<Country> path = this.getPathToRival(destination, countries);
+        Country attacker = this;
+        boolean attackSuccess = true;
+        while (!path.isEmpty() && attackSuccess) {
+            Country countryToAttack = path.pop();
+            attackSuccess = attacker.attack(countryToAttack, true);
+            attacker = countryToAttack;
+        }
+
+        return attackSuccess;
+    }
+
+    @Override
+    public int compareTo(Country c) {
+        return this.numOfTroops - c.numOfTroops;
     }
 }

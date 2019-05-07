@@ -11,7 +11,7 @@ import java.util.Random;
 public abstract class Player {
     private String name; // The name of the player.
     private String color; // The color of the player.
-    private List<Country> countries; // A list of the countries the player occupies.
+    protected List<Country> countries; // A list of the countries the player occupies.
 
     /**
      * A constructor that sets object variables.
@@ -42,6 +42,10 @@ public abstract class Player {
         this.countries.add(country);
     }
 
+    public void removeCountry(Country country) {
+        this.countries.remove(country);
+    }
+
     /**
      * Handles the process of distributing troops between the countries before the game starts.
      * It gives every country a random number of troops, while making sure there is at least one troop in every country.
@@ -57,9 +61,8 @@ public abstract class Player {
             Country country = initialCountries.get(i);
 
             int troopsForCountry;
-            if (i != initialCountries.size() - 1) {
+            if (i != initialCountries.size() - 1)
                 troopsForCountry = random.nextInt(Math.min(maxTroopsInCountry, initialTroops - (initialCountries.size() - i))) + 1;
-            }
             else troopsForCountry = initialTroops;
 
             this.addCountry(country, troopsForCountry);

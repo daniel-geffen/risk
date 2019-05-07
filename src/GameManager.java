@@ -3,12 +3,15 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import javax.websocket.Session;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
 
 public class GameManager {
     private static final String mapFilename = "/Users/tuvia/IdeaProjects/Risk/src/countries.json"; // The path to the map json file.
-    private static final int numOfHumanPlayers = 2; // The number of human players in a game.
+    private static final int numOfHumanPlayers = 1; // The number of human players in a game.
     private static final int numOfAIPlayers = 2; // The number of AI players in a game.
     private static final Map<String, Integer> continentBonuses = new HashMap<String, Integer>() {{
         put("Africa", 3);
@@ -85,6 +88,14 @@ public class GameManager {
         Collections.shuffle(this.playerColors);
         this.continents = createContinentsMap();
         this.countries = createCountryArray();
+    }
+
+    public Collection<Continent> getContinents() {
+        return this.continents.values();
+    }
+
+    public Country[] getCountries() {
+        return countries;
     }
 
     /**

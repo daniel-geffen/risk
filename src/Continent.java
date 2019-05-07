@@ -33,4 +33,28 @@ public class Continent {
     public int getTroopsBonus() {
         return this.troopsBonus;
     }
+
+    public Player getOwner() {
+        Player owner = this.countries.get(0).getOwner();
+        for (Country country : this.countries) {
+            if (owner != country.getOwner())
+                return null;
+        }
+
+        return owner;
+    }
+
+    public List<Country> getBorders() {
+        List<Integer> continentIds = new ArrayList<>();
+        for (Country country : this.countries)
+            continentIds.add(country.getId());
+
+        List<Country> borders = new ArrayList<>();
+        for (Country country : this.countries) {
+            if (!continentIds.containsAll(country.getNeighbors()))
+                borders.add(country);
+        }
+
+        return borders;
+    }
 }
