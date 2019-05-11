@@ -11,7 +11,7 @@ import java.util.*;
 
 public class GameManager {
     private static final String MAP_FILENAME = "/Users/tuvia/IdeaProjects/Risk/src/countries.json"; // The path to the map json file.
-    private static final int NUM_OF_HUMAN_PLAYERS = 1; // The number of human players in a game.
+    private static final int NUM_OF_HUMAN_PLAYERS = 2; // The number of human players in a game.
     private static final int NUM_OF_AI_PLAYERS = 2; // The number of AI players in a game.
     private static final Map<String, Integer> CONTINENT_BONUSES = new HashMap<String, Integer>() {{
         put("Africa", 3);

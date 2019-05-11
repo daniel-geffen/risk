@@ -59,8 +59,12 @@ public class Country implements Comparable<Country> {
         return this.continent;
     }
 
+    /**
+     * Add troops to the country.
+     * @param troopsToAdd The number of troops to add.
+     */
     public void addTroops(int troopsToAdd) {
-        System.out.println("Adding " + troopsToAdd + " troops to " + this.name);
+        System.out.println(this.owner.getName() + " adding " + troopsToAdd + " troops to " + this.name);
         this.numOfTroops += troopsToAdd;
     }
 
@@ -97,6 +101,12 @@ public class Country implements Comparable<Country> {
         return graph;
     }
 
+    /**
+     * Creates a Dijkstra graph from this country to countryToFind.
+     * @param countryToFind The country we are trying to find.
+     * @param countries The array of countries.
+     * @return The graph node of the countryToFind, connected to the other nodes accordingly and with the appropriate weight.
+     */
     private Node createDijkstraGraph(Country countryToFind, Country[] countries) {
         Map<Integer, Node> graph = createInitialGraph(countries);
 
@@ -137,6 +147,11 @@ public class Country implements Comparable<Country> {
         return path;
     }
 
+    /**
+     * @param continent A continent.
+     * @param countries The countries array.
+     * @return Get the border of the continent that is closest to this country.
+     */
     public Country getClosestContinentBorder(Continent continent, Country[] countries) {
         Country closestBorder = null;
         int distanceOfClosestBorder = Integer.MAX_VALUE;
@@ -154,6 +169,11 @@ public class Country implements Comparable<Country> {
         return closestBorder;
     }
 
+    /**
+     * @param continent A continent.
+     * @param countries The countries array.
+     * @return The distance (in number of troops on the way) of this country from the continent (from the closest border).
+     */
     public int getDistanceFromContinent(Continent continent, Country[] countries) {
         int distanceOfClosestBorder = Integer.MAX_VALUE;
         for (Country border : continent.getBorders()) {
@@ -169,6 +189,12 @@ public class Country implements Comparable<Country> {
         return distanceOfClosestBorder == Integer.MAX_VALUE ? 0 : distanceOfClosestBorder;
     }
 
+    /**
+     * Attack another country.
+     * @param countryToAttack The country to attack.
+     * @param moveAllTroopsOnWin Whether to move all troops (besides 1 that has to stay) to the new country when winning.
+     * @return Whether the attack was a success.
+     */
     public boolean attack(Country countryToAttack, boolean moveAllTroopsOnWin) {
         Pair<Integer, Integer> battleResults = BattleUtils.simulateBattle(this.numOfTroops, countryToAttack.numOfTroops);
         System.out.println("Battle results: " + this.name + " - " + battleResults.getKey() + ", " + countryToAttack.name + " - " + battleResults.getValue());
@@ -190,6 +216,12 @@ public class Country implements Comparable<Country> {
         }
     }
 
+    /**
+     * Goes on a series of attacks in the shortest path to destination.
+     * @param destination The destination of the attacks.
+     * @param countries The countries array.
+     * @return Whether the journey was successful.
+     */
     public boolean goOnAttackJourney(Country destination, Country[] countries) {
         Stack<Country> path = this.getPathToRival(destination, countries);
         Country attacker = this;
