@@ -57,4 +57,25 @@ public class Continent {
 
         return borders;
     }
+
+    /**
+     * Calculates the rating of the continent based on different variables:
+     * Static variables - troop bonus, number of border and number of countries.
+     * Dynamic variables - the number of armies in the continent (owned by the player and total) and same for the number of territories.
+     * @param player The player to calculate the rating for.
+     * @return The rating of the continent.
+     */
+    public float getContinentRating(Player player) {
+        float basicRating = (15 + this.troopsBonus - 4 * this.getBorders().size()) / (float) this.countries.size();
+        int numOfPlayerTerritories = 0, numOfPlayerArmies = 0, numOfArmies = 0;
+        for (Country country : this.countries) {
+            numOfArmies += country.getNumOfTroops();
+            if (country.getOwner() == player) {
+                numOfPlayerArmies += country.getNumOfTroops();
+                numOfPlayerTerritories++;
+            }
+        }
+
+        return (((float) numOfPlayerArmies / numOfArmies + (float) numOfPlayerTerritories / this.countries.size()) / 2) * basicRating;
+    }
 }

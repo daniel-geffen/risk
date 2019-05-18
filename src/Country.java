@@ -175,9 +175,10 @@ public class Country implements Comparable<Country> {
      * @return The distance (in number of troops on the way) of this country from the continent (from the closest border).
      */
     public int getDistanceFromContinent(Continent continent, Country[] countries) {
+        if (continent.getCountries().contains(this)) return 0;
         int distanceOfClosestBorder = Integer.MAX_VALUE;
         for (Country border : continent.getBorders()) {
-            Node graphNode = createDijkstraGraph(border, countries);
+            Node graphNode = this.createDijkstraGraph(border, countries);
             if (graphNode != null) {
                 int distanceOfBorder = graphNode.getDistance();
                 if (distanceOfBorder < distanceOfClosestBorder) {
@@ -186,7 +187,7 @@ public class Country implements Comparable<Country> {
             }
         }
 
-        return distanceOfClosestBorder == Integer.MAX_VALUE ? 0 : distanceOfClosestBorder;
+        return distanceOfClosestBorder;
     }
 
     /**

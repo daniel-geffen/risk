@@ -152,52 +152,56 @@ public class AIPlayer extends Player {
     }
 
     /**
+     * A comparator got countries that compares based on the number of enemy neighbors the country has.
+     */
+    private class EnemyNeighborsComparator implements Comparator<Country> {
+
+        @Override
+        public int compare(Country c1, Country c2) {
+            int numOfC1EnemyNeighbors = 0;
+            for (Integer neighborId : c1.getNeighbors())
+                if (AIPlayer.this.game.getCountries()[neighborId].getOwner() != AIPlayer.this)
+                    numOfC1EnemyNeighbors++;
+
+            int numOfC2EnemyNeighbors = 0;
+            for (Integer neighborId : c2.getNeighbors())
+                if (AIPlayer.this.game.getCountries()[neighborId].getOwner() != AIPlayer.this)
+                    numOfC2EnemyNeighbors++;
+
+            return numOfC1EnemyNeighbors - numOfC2EnemyNeighbors;
+        }
+    }
+
+    /**
      * @param continent A continent.
      * @return The closest country controlled by me by distance to the continent.
      */
     private Country getClosestCountry(Continent continent) {
-        Country bestCountry = null;
-        float bestProbability = 0;
+        List<Country> myCountriesInContinent = new ArrayList<>();
+        for (Country myCountry : continent.getCountries())
+            if (myCountry.getOwner() == this)
+                myCountriesInContinent.add(myCountry);
 
-        for (Country country : this.countries)
-            if (!this.getMyContinents().contains(country.getContinent())) {
-                Country closestContinentBorder = country.getClosestContinentBorder(continent, this.game.getCountries());
-                if (closestContinentBorder != null) {
-                    float probabilityOfJourneySuccess = this.probabilityOfJourneySuccess(country, closestContinentBorder);
-                    if (probabilityOfJourneySuccess > bestProbability) {
-                        bestCountry = country;
-                        bestProbability = probabilityOfJourneySuccess;
+        if (!myCountriesInContinent.isEmpty()) {
+            return Collections.max(myCountriesInContinent, new EnemyNeighborsComparator());
+        } else {
+            Country bestCountry = null;
+            float bestProbability = 0;
+
+            for (Country country : this.countries)
+                if (!this.getMyContinents().contains(country.getContinent())) {
+                    Country closestContinentBorder = country.getClosestContinentBorder(continent, this.game.getCountries());
+                    if (closestContinentBorder != null) {
+                        float probabilityOfJourneySuccess = this.probabilityOfJourneySuccess(country, closestContinentBorder);
+                        if (probabilityOfJourneySuccess > bestProbability) {
+                            bestCountry = country;
+                            bestProbability = probabilityOfJourneySuccess;
+                        }
                     }
                 }
-            }
 
-        if (bestCountry == null) {
-            List<Country> myCountriesInContinent = new ArrayList<>();
-            for (Country myCountry : continent.getCountries())
-                if (myCountry.getOwner() == this)
-                    myCountriesInContinent.add(myCountry);
-
-            if (!myCountriesInContinent.isEmpty()) {
-                return Collections.max(myCountriesInContinent, new Comparator<Country>() {
-                    @Override
-                    public int compare(Country c1, Country c2) {
-                        int numOfC1EnemyNeighbors = 0;
-                        for (Integer neighborId : c1.getNeighbors())
-                            if (AIPlayer.this.game.getCountries()[neighborId].getOwner() != AIPlayer.this)
-                                numOfC1EnemyNeighbors++;
-
-                        int numOfC2EnemyNeighbors = 0;
-                        for (Integer neighborId : c2.getNeighbors())
-                            if (AIPlayer.this.game.getCountries()[neighborId].getOwner() != AIPlayer.this)
-                                numOfC2EnemyNeighbors++;
-
-                        return numOfC1EnemyNeighbors - numOfC2EnemyNeighbors;
-                    }
-                });
-            }
+            return bestCountry;
         }
-
-        return bestCountry;
     }
 
     /**
@@ -230,13 +234,13 @@ public class AIPlayer extends Player {
      * @return The continent (not controlled by me) I should conquer next.
      */
     private Continent chooseBestContinentToConquer() {
-        Country largestCountry = Collections.max(this.countries);
         List<Continent> continents = this.game.getContinents();
         continents.removeAll(this.getMyContinents());
-        return Collections.min(continents, new Comparator<Continent>() {
+
+        return Collections.max(continents, new Comparator<Continent>() {
             @Override
             public int compare(Continent c1, Continent c2) {
-                return largestCountry.getDistanceFromContinent(c1, AIPlayer.this.game.getCountries()) - largestCountry.getDistanceFromContinent(c2, AIPlayer.this.game.getCountries());
+                return Float.compare(c1.getContinentRating(AIPlayer.this), c2.getContinentRating(AIPlayer.this));
             }
         });
     }
@@ -247,9 +251,26 @@ public class AIPlayer extends Player {
      * @param countryToConquerWith The country to use to conquer the continent.
      */
     private void conquerContinent(Continent continent, Country countryToConquerWith) {
-        Country continentClosestBorder = countryToConquerWith.getClosestContinentBorder(continent, this.game.getCountries());
-        if (continentClosestBorder != null)
-            countryToConquerWith.goOnAttackJourney(continentClosestBorder, this.game.getCountries());
+        if (countryToConquerWith.getContinent() != continent) {
+            Country continentClosestBorder = countryToConquerWith.getClosestContinentBorder(continent, this.game.getCountries());
+            if (continentClosestBorder != null && !countryToConquerWith.goOnAttackJourney(continentClosestBorder, this.game.getCountries()))
+                return;
+        }
+
+        while (countryToConquerWith.getNumOfTroops() > 1) {
+            List<Country> enemyNeighbors = new ArrayList<>();
+            for (Integer neighborId : countryToConquerWith.getNeighbors()) {
+                Country neighbor = this.game.getCountries()[neighborId];
+                if (neighbor.getOwner() != this && neighbor.getContinent() == continent)
+                    enemyNeighbors.add(neighbor);
+            }
+
+            if (enemyNeighbors.isEmpty()) return;
+
+            Country enemyToAttack = Collections.max(enemyNeighbors, new EnemyNeighborsComparator());
+            if (countryToConquerWith.attack(enemyToAttack, true))
+                countryToConquerWith = enemyToAttack;
+        }
     }
 
     /**
@@ -322,7 +343,7 @@ public class AIPlayer extends Player {
      */
     private void handleFortify() {
         if (!this.moveTroopsFromWithinContinentsToBorders()) {
-            // TODO
+
         }
     }
 }
