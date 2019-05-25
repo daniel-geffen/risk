@@ -420,7 +420,7 @@ function init() {
     const svg = document.getElementById('mapObject').contentDocument.getElementById('mapSvg');
     svgDoc = svg.ownerDocument;
 
-    webSocket = new WebSocket('ws://localhost:8080/Risk_war_exploded/ws');
+    webSocket = new WebSocket(`ws://${window.location.hostname}:8080/Risk_war_exploded/ws`);
     webSocket.onmessage = onServerMessage;
 }
 
